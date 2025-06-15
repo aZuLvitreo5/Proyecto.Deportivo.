@@ -44,4 +44,3 @@ window.nextSlide = function() {
   }
 }
 
-// Renderizar la primera diapositiva al cargar
