@@ -1,3 +1,4 @@
+ HEAD
 // app.js
 const slides = [
   {
@@ -45,4 +46,3 @@ window.nextSlide = function() {
 }
 
 // Renderizar la primera diapositiva al cargar
-renderSlide(currentSlide);
