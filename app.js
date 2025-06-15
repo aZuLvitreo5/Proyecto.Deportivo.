@@ -1,5 +1,4 @@
  HEAD
-// app.js
 const slides = [
   {
     title: "Bienvenidos al Proyecto Deportivo",
