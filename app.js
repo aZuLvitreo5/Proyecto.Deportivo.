@@ -49,7 +49,9 @@ function renderSlide(index) {
     <div class="slide-title">${slide.title}</div>
     <img class="slide-image" src="${slide.image}" alt="${slide.title}">
     <div class="slide-content">${slide.content}</div>
-    <div>${buttons}</div>
+    <div class="slide-buttons">
+      ${buttons}
+    </div>
   `;
 }
 

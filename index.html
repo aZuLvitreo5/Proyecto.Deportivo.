@@ -28,6 +28,8 @@
     .slide-title {
       font-size: 2rem;
       margin-bottom: 16px;
+      word-break: break-word; /* Permite cortar palabras largas */
+      white-space: normal;    /* Permite saltos de línea */
     }
     .slide-content {
       font-size: 1.2rem;
@@ -81,6 +83,26 @@
     }
     .restart-btn:hover, .restart-btn:active {
       background: linear-gradient(90deg, #a7acda, #ffffff);
+    }
+    /* Agrupa los botones en un contenedor flex */
+    .slide-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px; /* Espacio entre botones */
+      margin-top: 16px;
+    }
+
+    /* Haz que los botones ocupen el ancho completo en pantallas pequeñas */
+    @media (max-width: 500px) {
+      .slide-buttons button {
+        flex: 1 1 100%;
+        min-width: 0;
+      }
+      .slide-title {
+        font-size: 1.2rem;    /* Reduce el tamaño en móviles */
+        padding: 0 8px;       /* Añade espacio a los lados */
+      }
     }
   </style>
 </head>
