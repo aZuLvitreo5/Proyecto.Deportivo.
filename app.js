@@ -1,20 +1,24 @@
- HEAD
 const slides = [
   {
-    title: "Bienvenidos al Proyecto Deportivo",
+    title: "<p>BIENVENIDOS</p>Proyecto Deportivo X ",
     content: "Descubre cómo nuestro proyecto fomenta la actividad física y el trabajo en equipo.",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
+    image: "images/Imagen.001.png" // Usa la ruta relativa a la carpeta images
   },
   {
     title: "Nuestros Objetivos",
     content: "Promover la salud, la inclusión y el desarrollo personal a través del deporte.",
-    image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=600&q=80"
+    image: "images/Imagen.002.jpg"
   },
   {
     title: "¡Participa!",
-    content: "Tu participación es clave para el éxito del proyecto. ¡Sigue avanzando para conocer más!",
-    image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80"
-  }
+    content: "<p>Tu participación es clave para el éxito del proyecto.<p>¡Sigue avanzando para conocer más!",
+    image: "images/Imagen.003.png" // Usa la ruta relativa a la carpeta images
+  },
+  {
+    title: '¿Por qué "X"?',
+    content: "Porque queremos escuchar todas las opiniones, aquí tod@s somos tomad@s en cuenta, queremos establecer contigo los valores, los objetivos y los alcances de este Proyecto, así cómo el nombre del equipo, el color del uniforme y todas esas cosas que van sumando para hacer una gran familia deportiva.",
+    image: "images/Imagen.004.png"
+  },
 ];
 
 let currentSlide = 0;
@@ -22,15 +26,33 @@ let currentSlide = 0;
 function renderSlide(index) {
   const slide = slides[index];
   const container = document.getElementById('slide-container');
-  container.innerHTML = `
-    <div class="slide-title">${slide.title}</div>
-    <img class="slide-image" src="${slide.image}" alt="Imagen de la diapositiva">
-    <div class="slide-content">${slide.content}</div>
+  let buttons = `
+    <button class="prev-btn" onclick="prevSlide()" ${index === 0 ? 'disabled' : ''}>Anterior</button>
     <button class="next-btn" onclick="nextSlide()">
       ${index < slides.length - 1 ? 'Siguiente' : 'Finalizar'}
     </button>
   `;
+
+  // Si es la última diapositiva, agrega el botón para volver al inicio
+  if (index === slides.length - 1) {
+    buttons += `
+      <button class="restart-btn" onclick="restartSlides()">Volver al inicio</button>
+    `;
+  }
+
+  container.innerHTML = `
+    <div class="slide-title">${slide.title}</div>
+    <img class="slide-image" src="${slide.image}" alt="${slide.title}">
+    <div class="slide-content">${slide.content}</div>
+    <div>${buttons}</div>
+  `;
 }
+
+// Agrega la función para reiniciar las diapositivas
+window.restartSlides = function() {
+  currentSlide = 0;
+  renderSlide(currentSlide);
+};
 
 window.nextSlide = function() {
   if (currentSlide < slides.length - 1) {
@@ -43,4 +65,14 @@ window.nextSlide = function() {
     `;
   }
 }
+
+window.prevSlide = function() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    renderSlide(currentSlide);
+  }
+};
+
+// Agrega esta línea para mostrar la primera diapositiva al cargar
+renderSlide(currentSlide);
 
