@@ -15,7 +15,7 @@ const slides = [
     image: "images/Imagen.003.png" // Usa la ruta relativa a la carpeta images
   },
   {
-    title: "¿Por qué X?",
+    title: "¡Por qué X?",
     content: "Porque queremos escuchar todas las opiniones, aquí tod@s somos tomad@s en cuenta, queremos establecer contigo los valores, los objetivos y los alcances de este Proyecto, así cómo el nombre del equipo, el color del uniforme y todas esas cosas que van sumando para hacer una gran familia deportiva.",
     image: "images/Imagen.004.png"
   },
