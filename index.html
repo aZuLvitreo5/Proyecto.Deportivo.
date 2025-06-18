@@ -3,24 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Presentación Interactiva</title>
+  <title>Proyecto Deportivo X</title>
   <style>
     body {
       margin: 0;
-      font-family: "Arial";
+      font-family: "SF UI Display Extraclara", Arial, sans-serif;
       background: linear-gradient(120deg, #de0707, #ff9800, #fff700, #1e90ff);
       color: #fff;
+      min-height: 100vh;
+    }
+    .header {
       display: flex;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
+      padding: 16px 32px;
+      background: rgba(0,0,0,0.15);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .logo-container {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border-radius: 12px;
+      margin-right: 20px;
+      overflow: hidden;
+    }
+    .logo-container img {
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+    }
+    .header-text {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #222;
+      letter-spacing: 1px;
+    }
+    .nav-bar {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding: 16px 32px 0 32px;
+      background: rgba(0,0,0,0.10);
+      scrollbar-width: thin;
+      scrollbar-color: #fff #de0707;
+    }
+    .nav-bar::-webkit-scrollbar {
+      height: 6px;
+    }
+    .nav-bar::-webkit-scrollbar-thumb {
+      background: #fff;
+      border-radius: 4px;
+    }
+    .nav-bar::-webkit-scrollbar-track {
+      background: #de0707;
+    }
+    .nav-btn {
+      background: linear-gradient(90deg, #43e97b, #38f9d7);
+      color: #222;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      min-width: 120px;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .nav-btn.active, .nav-btn:focus {
+      background: linear-gradient(90deg, #de0707, #ff9800);
+      color: #fff;
+      outline: none;
+    }
+    @media (max-width: 600px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 8px;
+      }
+      .logo-container {
+        margin-right: 0;
+        margin-bottom: 8px;
+      }
+      .header-text {
+        font-size: 1.1rem;
+      }
+      .nav-bar {
+        padding: 12px 8px 0 8px;
+      }
+      .nav-btn {
+        font-size: 0.95rem;
+        min-width: 100px;
+        padding: 8px 12px;
+      }
     }
     .slide-container {
-      background: #1f1f1f;
+      background: #333;
       border-radius: 16px;
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
       width: 90vw;
       max-width: 600px;
+      margin: 32px auto 0 auto;
       padding: 32px 24px;
       text-align: center;
       position: relative;
@@ -28,85 +113,36 @@
     .slide-title {
       font-size: 2rem;
       margin-bottom: 16px;
-      word-break: break-word; /* Permite cortar palabras largas */
-      white-space: normal;    /* Permite saltos de línea */
+      word-break: break-word;
+      white-space: normal;
     }
     .slide-content {
       font-size: 1.2rem;
       margin-bottom: 24px;
     }
     .slide-image {
-      max-width: 70%;
+      max-width: 100%;
+      height: auto;
+      max-height: 40vh;
+      display: block;
+      margin: 0 auto 24px auto;
       border-radius: 8px;
-      margin-bottom: 24px;
-    }
-    .next-btn {
-      background: linear-gradient(120deg, #0b07ed, #ce07a3);
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 32px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .next-btn:hover, .next-btn:active {
-      background:linear-gradient(120deg, #d6c50d, #ce07a3);
-    }
-    .prev-btn {
-      background: linear-gradient(120deg, #ff9800, #de0707);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 32px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-right: 10px;
-    }
-        .prev-btn:hover, .prev-btn:active {
-      background:linear-gradient(120deg, #0d96d6, #ce9c07);
-    }
-    .prev-btn:disabled {
-      opacity: 0.2;
-      cursor: not-allowed;
-    }
-    .restart-btn {
-      background: linear-gradient(90deg, #dbe9e6, #38f9d7);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 32px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-left: 10px;
-      transition: background 0.2s;
-    }
-    .restart-btn:hover, .restart-btn:active {
-      background: linear-gradient(90deg, #a7acda, #ffffff);
-    }
-    /* Agrupa los botones en un contenedor flex */
-    .slide-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px; /* Espacio entre botones */
-      margin-top: 16px;
-    }
-
-    /* Haz que los botones ocupen el ancho completo en pantallas pequeñas */
-    @media (max-width: 500px) {
-      .slide-buttons button {
-        flex: 1 1 100%;
-        min-width: 0;
-      }
-      .slide-title {
-        font-size: 1.2rem;    /* Reduce el tamaño en móviles */
-        padding: 0 8px;       /* Añade espacio a los lados */
-      }
     }
   </style>
 </head>
 <body>
+  <header class="header">
+    <div class="logo-container">
+      <img src="images/logo.jpg" alt="Logotipo">
+    </div>
+    <div class="header-text">
+      Proyecto Deportivo X<br>
+      <span style="font-size:1rem; font-weight:normal;">¡Fomentando la actividad física y el trabajo en equipo!</span>
+    </div>
+  </header>
+  <nav class="nav-bar" id="nav-bar">
+    <!-- Los botones de las diapositivas se generan con JS -->
+  </nav>
   <div class="slide-container" id="slide-container">
     <!-- El contenido de la diapositiva se genera con JS -->
   </div>

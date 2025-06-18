@@ -1,8 +1,8 @@
 const slides = [
   {
-    title: "<p>BIENVENIDOS</p>Proyecto Deportivo X ",
+    title: "<p>BIENVENIDOS Proyecto Deportivo X ",
     content: "Descubre cómo nuestro proyecto fomenta la actividad física y el trabajo en equipo.",
-    image: "images/Imagen.001.png" // Usa la ruta relativa a la carpeta images
+    image: "images/Imagen.001.png"
   },
   {
     title: "Nuestros Objetivos",
@@ -12,7 +12,7 @@ const slides = [
   {
     title: "¡Participa!",
     content: "<p>Tu participación es clave para el éxito del proyecto.<p>¡Sigue avanzando para conocer más!",
-    image: "images/Imagen.003.png" // Usa la ruta relativa a la carpeta images
+    image: "images/Imagen.003.png"
   },
   {
     title: "¿Por qué X?",
@@ -27,6 +27,16 @@ const slides = [
 ];
 
 let currentSlide = 0;
+
+function renderNavBar() {
+  const navBar = document.getElementById('nav-bar');
+  if (!navBar) return;
+  navBar.innerHTML = slides.map((slide, idx) => `
+    <button class="nav-btn${idx === currentSlide ? ' active' : ''}" onclick="goToSlide(${idx})">
+      ${slide.title.replace(/<[^>]*>?/gm, '').slice(0, 18)}
+    </button>
+  `).join('');
+}
 
 function renderSlide(index) {
   const slide = slides[index];
@@ -47,15 +57,20 @@ function renderSlide(index) {
 
   container.innerHTML = `
     <div class="slide-title">${slide.title}</div>
-    <img class="slide-image" src="${slide.image}" alt="${slide.title}">
+    <img class="slide-image" src="${slide.image}" alt="${slide.title.replace(/<[^>]*>?/gm, '')}">
     <div class="slide-content">${slide.content}</div>
     <div class="slide-buttons">
       ${buttons}
     </div>
   `;
+  renderNavBar();
 }
 
-// Agrega la función para reiniciar las diapositivas
+window.goToSlide = function(idx) {
+  currentSlide = idx;
+  renderSlide(currentSlide);
+};
+
 window.restartSlides = function() {
   currentSlide = 0;
   renderSlide(currentSlide);
@@ -70,9 +85,9 @@ window.nextSlide = function() {
       <div class="slide-title">¡Gracias por tu atención!</div>
       <div class="slide-content">Has completado la presentación del proyecto. ¡Esperamos verte involucrado!</div>
     `;
-
+    renderNavBar();
   }
-}
+};
 
 window.prevSlide = function() {
   if (currentSlide > 0) {
@@ -81,6 +96,6 @@ window.prevSlide = function() {
   }
 };
 
-// Agrega esta línea para mostrar la primera diapositiva al cargar
+// Mostrar la primera diapositiva y la barra de navegación al cargar
 renderSlide(currentSlide);
 
