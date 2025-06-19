@@ -81,6 +81,16 @@ function renderVerticalSlides() {
   container.innerHTML = html;
 }
 
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+      splash.style.opacity = '0';
+      setTimeout(() => splash.style.display = 'none', 800);
+    }
+  }, 3000);
+});
+
 renderNavBar();
 renderVerticalSlides();
 
