@@ -81,7 +81,8 @@ function renderVerticalSlides() {
   container.innerHTML = html;
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
+  // Splash screen
   setTimeout(() => {
     const splash = document.getElementById('splash-screen');
     if (splash) {
@@ -89,6 +90,21 @@ window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => splash.style.display = 'none', 800);
     }
   }, 3000);
+
+  // Menu toggle for mobile
+  const menuToggle = document.getElementById('menu-toggle');
+  const navBar = document.getElementById('nav-bar');
+  if (menuToggle && navBar) {
+    menuToggle.addEventListener('click', () => {
+      navBar.classList.toggle('open');
+    });
+    // Optional: close menu when a button is clicked
+    navBar.addEventListener('click', (e) => {
+      if (e.target.classList.contains('nav-btn')) {
+        navBar.classList.remove('open');
+      }
+    });
+  }
 });
 
 renderNavBar();
