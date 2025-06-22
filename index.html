@@ -383,6 +383,9 @@
 }
       .nav-bar.open {
         display: flex !important;
+        flex-direction: column !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
       }
       .nav-btn {
         border-bottom: 1px solid #333;
@@ -503,6 +506,32 @@
   background: linear-gradient(90deg, #43e97b, #38f9d7);
   color: #23272e;
   opacity: 1;
+}
+@media (max-width: 600px) {
+  .nav-btn, .submenu-btn {
+    width: 100vw;
+    border-radius: 0;
+    text-align: left;
+    padding-left: 24px;
+    border-right: none;
+    border-bottom: 1px solid #333;
+  }
+  .conceptos-menu {
+    width: 100vw;
+  }
+  .conceptos-submenu {
+    position: static;
+    box-shadow: none;
+    border-radius: 0;
+    background: #23272ecc;
+    margin-top: 0;
+    display: none;
+    flex-direction: column;
+    width: 100vw;
+  }
+  .conceptos-menu.open .conceptos-submenu {
+    display: flex !important;
+  }
 }
   </style>
 </head>

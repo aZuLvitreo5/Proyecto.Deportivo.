@@ -91,12 +91,13 @@ function renderNavBar() {
 
   // Submenu toggle for mobile (debe ir aquí, después de crear el HTML)
   const conceptosMenu = navBar.querySelector('.conceptos-menu > .nav-btn');
+  const conceptosMenuDiv = navBar.querySelector('.conceptos-menu');
   const conceptosSubmenu = navBar.querySelector('.conceptos-submenu');
-  if (conceptosMenu && conceptosSubmenu) {
+  if (conceptosMenu && conceptosSubmenu && conceptosMenuDiv) {
     conceptosMenu.addEventListener('click', (e) => {
       if (window.innerWidth <= 600) {
         e.preventDefault();
-        conceptosSubmenu.style.display = conceptosSubmenu.style.display === 'flex' ? 'none' : 'flex';
+        conceptosMenuDiv.classList.toggle('open');
       }
     });
   }
