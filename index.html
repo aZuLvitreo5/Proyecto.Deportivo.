@@ -54,7 +54,7 @@
     }
     .nav-bar {
       position: fixed;
-      top: 72px; /* Ajusta según la altura de tu header */
+      top: 72px;
       left: 0;
       width: 100vw;
       z-index: 999;
@@ -64,16 +64,12 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
       gap: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+      background: #23272eaa;
     }
-    .nav-bar {
-      display: flex;
-      overflow-x: auto;
-      gap: 10px;
-      padding: 16px 32px 0 32px;
-      background: rgba(0,0,0,0.10);
-      scrollbar-width: thin;
-      scrollbar-color: #fff #de0707;
-    }
+    
     .nav-bar::-webkit-scrollbar {
       height: 6px;
     }
@@ -369,17 +365,22 @@
         display: flex;
       }
       .nav-bar {
-        display: none !important;
-        position: fixed;
-        top: 120px;
-        left: 0;
-        width: 100vw;
-        flex-direction: column;
-        background: #23272e;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-        padding: 0;
-        gap: 0;
-      }
+  position: fixed;
+  top: 72px;
+  left: 0;
+  width: 100vw;
+  z-index: 999;
+  background: #23272e;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+  background: #23272eaa;
+}
       .nav-bar.open {
         display: flex !important;
       }
@@ -392,6 +393,117 @@
         padding-left: 24px;
       }
     }
+    /* Oculta la nav-bar por defecto y la muestra al acercar el mouse */
+.nav-bar {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+  background: #23272eaa; /* gris oscuro con transparencia */
+}
+
+.nav-bar:hover,
+.nav-bar:focus-within,
+.header:hover ~ .nav-bar,
+.header:focus-within ~ .nav-bar {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.header:hover ~ .nav-bar,
+.header:focus-within ~ .nav-bar {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Área sensible para mostrar la nav-bar al acercar el mouse */
+.nav-hover-area {
+  position: fixed;
+  top: 72px;
+  left: 0;
+  width: 100vw;
+  height: 48px;
+  z-index: 998;
+}
+
+/* Botones transparentes y efecto hover */
+.nav-btn, .submenu-btn {
+  background: rgba(67,233,123,0.18);
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  padding: 18px 0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(67,233,123,0.08);
+  width: 100%;
+  min-width: 0;
+  white-space: normal;
+  border-right: 1px solid #333;
+  border-bottom: 1px solid #333;
+  height: 100%;
+  box-sizing: border-box;
+  opacity: 0.7;
+}
+
+.nav-btn:hover, .submenu-btn:hover, .nav-btn:focus, .submenu-btn:focus {
+  background: linear-gradient(90deg, #43e97b, #38f9d7);
+  color: #23272e;
+  opacity: 1;
+}
+
+.nav-btn.active, .submenu-btn.active {
+  background: linear-gradient(90deg, #de0707, #ff9800);
+  color: #fff;
+  opacity: 1;
+}
+
+/* Submenú estilos */
+.conceptos-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.conceptos-submenu {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  min-width: 180px;
+  background: #23272ecc;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  border-radius: 0 0 12px 12px;
+  z-index: 1001;
+  flex-direction: column;
+  margin-top: 2px;
+}
+
+.conceptos-menu:hover .conceptos-submenu,
+.conceptos-menu:focus-within .conceptos-submenu {
+  display: flex;
+}
+
+.conceptos-submenu .submenu-btn {
+  padding: 14px 18px;
+  border-bottom: 1px solid #333;
+  border-radius: 0;
+  background: rgba(67,233,123,0.12);
+  color: #fff;
+  text-align: left;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.conceptos-submenu .submenu-btn:last-child {
+  border-bottom: none;
+}
+
+.conceptos-submenu .submenu-btn:hover {
+  background: linear-gradient(90deg, #43e97b, #38f9d7);
+  color: #23272e;
+  opacity: 1;
+}
   </style>
 </head>
 <body>
@@ -413,6 +525,7 @@
     </button>
   </header>
   <nav class="nav-bar" id="nav-bar"></nav>
+  <div class="nav-hover-area"></div>
   <div class="vertical-slider-container" id="vertical-slider-container"></div>
   <script src="app.js"></script>
 </body>

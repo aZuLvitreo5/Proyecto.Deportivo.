@@ -29,24 +29,85 @@ const slides = [
     image: "images/Imagen.005.png",
     background: "images/fondo5.png"
   },
+  {
+    title: "Concepto TLATOANI HOOPS",
+    content: `
+      <p>Este es un posible logo para el Proyecto Deportivo X.</p>
+      <p>El diseño busca transmitir energía, inclusión y trabajo en equipo, reflejando los valores fundamentales de nuestro proyecto.</p>
+      <p><em>¿Tienes una propuesta de logo? ¡Compártela con nosotros!</em></p>
+    `,
+    image: "images/logo001.png", // Cambia la ruta si tu logo está en otro lugar
+    background: "images/fondo_logo.jpg" // Opcional: fondo especial para esta diapositiva
+  },
+  {
+    title: "Concepto MEXICAS BASKET",
+    content: `
+      <p>Este es un posible logo para el Proyecto Deportivo X.</p>
+      <p>El diseño busca transmitir energía, inclusión y trabajo en equipo, reflejando los valores fundamentales de nuestro proyecto.</p>
+      <p><em>¿Tienes una propuesta de logo? ¡Compártela con nosotros!</em></p>
+    `,
+    image: "images/logo002.png", // Cambia la ruta si tu logo está en otro lugar
+    background: "images/fondo_logo.jpg" // Opcional: fondo especial para esta diapositiva
+  }
 ];
+
+console.log("slides:", slides);
 
 function renderNavBar() {
   const navBar = document.getElementById('nav-bar');
   if (!navBar) return;
-  navBar.innerHTML = slides.map((slide, idx) => `
-    <button class="nav-btn" onclick="scrollToSlide(${idx})">
-      ${slide.title.replace(/<[^>]*>?/gm, '').slice(0, 18)}
-    </button>
-  `).join('');
+
+  const conceptosSlides = slides
+    .map((slide, idx) => ({ ...slide, idx }))
+    .filter(slide => slide.title && slide.title.toLowerCase().includes('concepto'));
+
+  const normalSlides = slides
+    .map((slide, idx) => ({ ...slide, idx }))
+    .filter(slide => !(slide.title && slide.title.toLowerCase().includes('concepto')));
+
+  let navHTML = normalSlides.map(slide => `
+      <button class="nav-btn" onclick="scrollToSlide(${slide.idx})">
+        ${slide.title.replace(/<[^>]*>?/gm, '').slice(0, 18)}
+      </button>
+    `).join('');
+
+  // Solo agrega el botón Conceptos si hay diapositivas de conceptos
+  if (conceptosSlides.length > 0) {
+    navHTML += `
+      <div class="conceptos-menu">
+        <button class="nav-btn" tabindex="0">Conceptos ▼</button>
+        <div class="conceptos-submenu">
+          ${conceptosSlides.map(slide => `
+            <button class="submenu-btn" onclick="scrollToSlide(${slide.idx})">
+              ${slide.title.replace(/<[^>]*>?/gm, '').slice(0, 22)}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  navBar.innerHTML = navHTML;
+
+  // Submenu toggle for mobile (debe ir aquí, después de crear el HTML)
+  const conceptosMenu = navBar.querySelector('.conceptos-menu > .nav-btn');
+  const conceptosSubmenu = navBar.querySelector('.conceptos-submenu');
+  if (conceptosMenu && conceptosSubmenu) {
+    conceptosMenu.addEventListener('click', (e) => {
+      if (window.innerWidth <= 600) {
+        e.preventDefault();
+        conceptosSubmenu.style.display = conceptosSubmenu.style.display === 'flex' ? 'none' : 'flex';
+      }
+    });
+  }
 }
 
-window.scrollToSlide = function(idx) {
+function scrollToSlide(idx) {
   const slide = document.querySelectorAll('.vertical-slide')[idx];
   if (slide) {
     slide.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-};
+}
 
 function renderVerticalSlides() {
   const container = document.getElementById('vertical-slider-container');
