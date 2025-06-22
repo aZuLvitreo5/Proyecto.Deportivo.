@@ -159,11 +159,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (menuToggle && navBar) {
     menuToggle.addEventListener('click', () => {
       navBar.classList.toggle('open');
+      // Si el menú se cierra, cierra también los submenús
+      if (!navBar.classList.contains('open')) {
+        document.querySelectorAll('.conceptos-menu.open').forEach(menu => {
+          menu.classList.remove('open');
+        });
+      }
     });
-    // Optional: close menu when a button is clicked
+    // Cierra menú y submenús al hacer clic en cualquier botón
     navBar.addEventListener('click', (e) => {
-      if (e.target.classList.contains('nav-btn')) {
+      if (
+        e.target.classList.contains('nav-btn') ||
+        e.target.classList.contains('submenu-btn')
+      ) {
         navBar.classList.remove('open');
+        document.querySelectorAll('.conceptos-menu.open').forEach(menu => {
+          menu.classList.remove('open');
+        });
       }
     });
   }
