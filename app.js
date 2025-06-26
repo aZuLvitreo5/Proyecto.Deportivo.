@@ -33,7 +33,7 @@ const slides = [
     title: "Concepto TLATOANI HOOPS",
     content: `
       <p>Este es un posible logo para el Proyecto Deportivo X.</p>
-      <p>El diseño busca transmitir energía, inclusión y trabajo en equipo, reflejando los valores fundamentales de nuestro proyecto.</p>
+      <p>Este logo transmite una identidad fuerte y única: orgullo indígena, liderazgo, fuerza y pasión deportiva.</p>
       <p><em>¿Tienes una propuesta de logo? ¡Compártela con nosotros!</em></p>
     `,
     image: "images/logo001.png", // Cambia la ruta si tu logo está en otro lugar
@@ -43,7 +43,7 @@ const slides = [
     title: "Concepto MEXICAS BASKET",
     content: `
       <p>Este es un posible logo para el Proyecto Deportivo X.</p>
-      <p>El diseño busca transmitir energía, inclusión y trabajo en equipo, reflejando los valores fundamentales de nuestro proyecto.</p>
+      <p>Este logo proyecta una imagen de orgullo nacional, ferocidad competitiva y raíces culturales profundas.</p>
       <p><em>¿Tienes una propuesta de logo? ¡Compártela con nosotros!</em></p>
     `,
     image: "images/logo002.png", // Cambia la ruta si tu logo está en otro lugar
@@ -115,15 +115,6 @@ function renderVerticalSlides() {
   if (!container) return;
   let html = '<div class="vertical-slider">';
   slides.forEach((slide, idx) => {
-    if (idx > 0) {
-      html += `
-        <div class="slide-separator">
-          <div class="separator-line"></div>
-          <div class="separator-circle"></div>
-          <div class="separator-line"></div>
-        </div>
-      `;
-    }
     html += `
       <div class="vertical-slide" id="slide-${idx}"
         style="${slide.background ? `
@@ -173,14 +164,45 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.classList.contains('submenu-btn')
       ) {
         navBar.classList.remove('open');
+        // Cierra todos los submenús de conceptos (en cualquier dispositivo)
         document.querySelectorAll('.conceptos-menu.open').forEach(menu => {
           menu.classList.remove('open');
         });
+        // Además, si hay un submenú abierto por hover, lo oculta forzando el blur
+        if (document.activeElement) document.activeElement.blur();
       }
     });
   }
-});
 
-renderNavBar();
-renderVerticalSlides();
+  // Renderiza el menú y los slides
+  renderNavBar();
+  renderVerticalSlides();
+
+  
+  // Sticky nav-bar al hacer scroll
+  const header = document.querySelector('.header');
+  const navHoverArea = document.querySelector('.nav-hover-area');
+  function updateNavBarPosition() {
+    const headerHeight = header.offsetHeight;
+    const hoverAreaHeight = 48; // Debe coincidir con el height de .nav-hover-area
+    if (window.scrollY >= headerHeight) {
+      navBar.style.position = 'fixed';
+      navBar.style.top = hoverAreaHeight + 'px';
+      if (navHoverArea) {
+        navHoverArea.style.position = 'fixed';
+        navHoverArea.style.top = '0';
+      }
+    } else {
+      navBar.style.position = 'absolute';
+      navBar.style.top = (headerHeight + hoverAreaHeight) + 'px';
+      if (navHoverArea) {
+        navHoverArea.style.position = 'absolute';
+        navHoverArea.style.top = headerHeight + 'px';
+      }
+    }
+  }
+  window.addEventListener('scroll', updateNavBarPosition);
+  window.addEventListener('resize', updateNavBarPosition);
+  updateNavBarPosition();
+});
 

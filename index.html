@@ -15,9 +15,9 @@
       letter-spacing: 0.01em;
     }
     .header {
-      position: fixed;
-      top: 0;
-      left: 0;
+      position: static; /* o puedes quitar la línea position: fixed */
+      top: auto;
+      left: auto;
       width: 100vw;
       z-index: 1000;
       display: flex;
@@ -54,11 +54,11 @@
     }
     .nav-bar {
       position: fixed;
-      top: 72px;
+      top: 48px; /* Justo debajo de .nav-hover-area */
       left: 0;
       width: 100vw;
-      z-index: 999;
-      background: #23272e;
+      z-index: 1099;
+      background: #23272eaa;
       box-shadow: 0 2px 8px rgba(0,0,0,0.10);
       padding: 0;
       display: grid;
@@ -67,7 +67,9 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s;
-      background: #23272eaa;
+      height: 64px; /* o el valor que prefieras, por ejemplo 72px */
+      min-height: 64px;
+      align-items: center;
     }
     
     .nav-bar::-webkit-scrollbar {
@@ -203,7 +205,7 @@
       background: transparent;
       box-shadow: none;
       scroll-snap-type: y mandatory;
-      margin-top: 120px; /* Ajusta según la suma de header + nav-bar */
+      margin-top: calc(80px + 56px); /* header + nav-bar, ajusta según tus alturas */
     }
 
     .vertical-slider {
@@ -229,14 +231,9 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.18);
     }
 
-    .vertical-slide::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border: 4px solid #000;
-      border-radius: 32px;
-      pointer-events: none;
-      z-index: 1;
+    .vertical-slide.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .slide-title {
@@ -365,21 +362,17 @@
         display: flex;
       }
       .nav-bar {
-  position: fixed;
-  top: 72px;
-  left: 0;
   width: 100vw;
   z-index: 999;
-  background: #23272e;
+  background: #23272eaa;
   box-shadow: 0 2px 8px rgba(0,0,0,0.10);
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: 0;
-  opacity: 0;
-  pointer-events: none;
+  opacity: 1;
+  pointer-events: auto;
   transition: opacity 0.4s;
-  background: #23272eaa;
 }
       .nav-bar.open {
         display: flex !important;
@@ -394,6 +387,9 @@
         padding-left: 24px;
         border-right: none;
         border-bottom: 1px solid #333;
+        height: 64px; /* igual que .nav-bar */
+        font-size: 1.25rem; /* más grande el texto */
+        padding: 0 24px;
       }
       .conceptos-menu {
         width: 100vw;
@@ -412,36 +408,22 @@
         display: flex !important;
       }
     }
-    /* Oculta la nav-bar por defecto y la muestra al acercar el mouse */
-.nav-bar {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s;
-  background: #23272eaa; /* gris oscuro con transparencia */
-}
-
-.nav-bar:hover,
-.nav-bar:focus-within,
-.header:hover ~ .nav-bar,
-.header:focus-within ~ .nav-bar {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.header:hover ~ .nav-bar,
-.header:focus-within ~ .nav-bar {
-  opacity: 1;
-  pointer-events: auto;
-}
-
+    
 /* Área sensible para mostrar la nav-bar al acercar el mouse */
 .nav-hover-area {
   position: fixed;
-  top: 72px;
+  top: 0;
   left: 0;
   width: 100vw;
   height: 48px;
-  z-index: 998;
+  z-index: 1100;
+  background: rgba(44, 83, 100, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.3s, top 0.3s, position 0.3s;
+  border-bottom: 2px solid #43e97b;
 }
 
 /* Botones transparentes y efecto hover */
@@ -499,7 +481,9 @@
 }
 
 .conceptos-menu:hover .conceptos-submenu,
-.conceptos-menu:focus-within .conceptos-submenu {
+.conceptos-menu:focus-within .conceptos-submenu,
+.conceptos-submenu:hover,
+.conceptos-submenu:focus-within {
   display: flex;
 }
 
@@ -524,9 +508,41 @@
   opacity: 1;
 }
 @media (max-width: 600px) {
-  .nav-bar {
-    display: none;
+  .nav-bar,
+  .nav-hover-area {
+    display: none !important;
   }
+}
+@keyframes menuHint {
+  0%,100% { opacity: 0.7; transform: translateY(0);}
+  50% { opacity: 1; transform: translateY(-4px);}
+}
+.menu-label {
+  color: #43e97b;
+  font-size: 1.5rem; /* Más grande el texto */
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  opacity: 0.95;
+  user-select: none;
+  animation: menuHint 2s infinite;
+}
+.nav-hover-area,
+.nav-bar {
+  transition: opacity 0.3s;
+}
+
+.nav-hover-area:hover + .nav-bar,
+.nav-bar:hover,
+.nav-bar:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-hover-area:hover,
+.nav-bar:hover ~ .nav-hover-area,
+.nav-bar:focus-within ~ .nav-hover-area {
+  opacity: 0;
+  pointer-events: none;
 }
   </style>
 </head>
@@ -548,8 +564,10 @@
       <span></span>
     </button>
   </header>
+  <div class="nav-hover-area">
+    <span class="menu-label">☰ Menú</span>
+  </div>
   <nav class="nav-bar" id="nav-bar"></nav>
-  <div class="nav-hover-area"></div>
   <div class="vertical-slider-container" id="vertical-slider-container"></div>
   <script src="app.js"></script>
 </body>
