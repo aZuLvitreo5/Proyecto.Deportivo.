@@ -178,7 +178,6 @@ function renderVerticalSlides() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Splash doble: primero balón, luego logo
   const splashLogo = document.getElementById('splash-logo');
   const splashBalon = document.getElementById('splash-balon');
   const appElements = [
@@ -192,27 +191,61 @@ document.addEventListener('DOMContentLoaded', () => {
   // Oculta la app mientras está el splash
   appElements.forEach(el => { if (el) el.style.visibility = 'hidden'; });
 
-  // Primero splash balón
+  // Muestra splash balón y oculta splash logo
   splashBalon.style.display = 'flex';
   splashBalon.style.opacity = '1';
   splashLogo.style.display = 'none';
-  setTimeout(() => {
-    splashBalon.style.opacity = '0';
+
+  // Espera a que todas las imágenes de las slides estén cargadas
+  const images = Array.from(document.querySelectorAll('.vertical-slide img'));
+  // Pero como aún no se han renderizado, mejor espera a que se rendericen
+  renderNavBar();
+  renderVerticalSlides();
+
+  // Ahora sí, busca las imágenes de las slides
+  const slideImages = Array.from(document.querySelectorAll('.vertical-slide img'));
+  let loaded = 0;
+  const total = slideImages.length;
+
+  if (total === 0) finishLoading();
+  else {
+    slideImages.forEach(img => {
+      if (img.complete) {
+        loaded++;
+        if (loaded === total) finishLoading();
+      } else {
+        img.addEventListener('load', () => {
+          loaded++;
+          if (loaded === total) finishLoading();
+        });
+        img.addEventListener('error', () => {
+          loaded++;
+          if (loaded === total) finishLoading();
+        });
+      }
+    });
+  }
+
+  function finishLoading() {
+    // Espera un pequeño tiempo extra para UX (opcional)
     setTimeout(() => {
-      splashBalon.style.display = 'none';
-      // Ahora splash logo
-      splashLogo.style.display = 'flex';
-      splashLogo.style.opacity = '1';
+      splashBalon.style.opacity = '0';
       setTimeout(() => {
-        splashLogo.style.opacity = '0';
+        splashBalon.style.display = 'none';
+        // Ahora splash logo
+        splashLogo.style.display = 'flex';
+        splashLogo.style.opacity = '1';
         setTimeout(() => {
-          splashLogo.style.display = 'none';
-          // Ahora sí, muestra la app
-          appElements.forEach(el => { if (el) el.style.visibility = 'visible'; });
-        }, 800);
-      }, 1800); // Duración del splash del logo
-    }, 800);
-  }, 1800); // Duración del splash del balón
+          splashLogo.style.opacity = '0';
+          setTimeout(() => {
+            splashLogo.style.display = 'none';
+            // Ahora sí, muestra la app
+            appElements.forEach(el => { if (el) el.style.visibility = 'visible'; });
+          }, 800);
+        }, 1800); // Duración del splash del logo
+      }, 800);
+    }, 400); // Espera extra opcional tras cargar todo
+  }
 
   // Menu toggle for mobile
   const menuToggle = document.getElementById('menu-toggle');
@@ -253,11 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Renderiza el menú y los slides
-  renderNavBar();
-  renderVerticalSlides();
-
-  
   // Sticky nav-bar al hacer scroll
   const header = document.querySelector('.header');
   const navHoverArea = document.querySelector('.nav-hover-area');
