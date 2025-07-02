@@ -1,3 +1,5 @@
+let showingConceptsOnly = false;
+
 const slides = [
   {
     title: "<p>BIENVENIDOS Proyecto Deportivo X ",
@@ -25,12 +27,17 @@ const slides = [
   },
   {
     title: "Te esperamos",
-    content: "Sé el cambio que quieres ver en el mundo",
+    content: `Sé el cambio que quieres ver en el mundo
+    <br><br>
+    <button class="conceptos-btn" onclick="showConceptSlides()">Mira nuestros conceptos de logo</button>
+  `,
     image: "images/Imagen.005.png",
     background: "images/fondo5.png"
   },
-  // Las siguientes slides ya NO llevan la palabra "Concepto" en el título,
-  // pero agregamos una propiedad extra para que sigan apareciendo en el submenú Conceptos
+];
+
+// Slides de conceptos (solo aquí)
+const conceptSlides = [
   {
     title: "Tlatoani Hoops",
     isConcept: true,
@@ -53,7 +60,6 @@ Ideal para una academia que forma no solo jugadores, sino líderes dentro y fuer
 
 Mezcla raíces culturales con identidad deportiva contemporánea.
 </p>
-      <p><em>¿Tienes una propuesta de logo? ¡Compártela con nosotros!</em></p>
     `,
     image: "images/logo001.png",
     background: "images/fondo_logo.jpg"
@@ -80,6 +86,18 @@ Mezcla raíces culturales con identidad deportiva contemporánea.
     `,
     image: "images/sky-hoops.png",
     background: "images/fondo_logo.jpg"
+  },
+  {
+    title: "¡Envía tu concepto!",
+    isConcept: true,
+    content: `
+      <p>¿Tienes una idea para el logo o el nombre del proyecto?</p>
+      <p><strong>¡Queremos conocer tu propuesta!</strong></p>
+      <p>Muy pronto podrás enviarnos tu concepto y ser parte de la identidad de este proyecto deportivo.</p>
+      <p>¡Mantente pendiente!</p>
+    `,
+    image: "images/ideas-concepto.png", // Puedes cambiar la imagen o dejarla vacía si prefieres
+    background: "images/fondo_logo.jpg"
   }
 ];
 
@@ -89,50 +107,37 @@ function renderNavBar() {
   const navBar = document.getElementById('nav-bar');
   if (!navBar) return;
 
-  // Ahora usamos la propiedad isConcept para el submenú
-  const conceptosSlides = slides
-    .map((slide, idx) => ({ ...slide, idx }))
-    .filter(slide => slide.isConcept);
-
-  const normalSlides = slides
-    .map((slide, idx) => ({ ...slide, idx }))
-    .filter(slide => !slide.isConcept);
-
-  let navHTML = normalSlides.map(slide => {
-    // Si el título contiene "bienvenidos", solo muestra "Bienvenidos"
+  let navHTML = slides.map((slide, idx) => {
     let btnText = /bienvenidos/i.test(slide.title)
       ? "Bienvenidos"
       : slide.title.replace(/<[^>]*>?/gm, '').slice(0, 18);
     return `
-      <button class="nav-btn" onclick="scrollToSlide(${slide.idx})">
+      <button class="nav-btn" onclick="showMainSlides(); scrollToSlide(${idx})">
         ${btnText}
       </button>
     `;
   }).join('');
 
-  // Solo agrega el botón Conceptos si hay diapositivas de conceptos
-  if (conceptosSlides.length > 0) {
-    navHTML += `
-      <div class="conceptos-menu">
-        <button class="nav-btn" tabindex="0">Conceptos ▼</button>
-        <div class="conceptos-submenu">
-          ${conceptosSlides.map(slide => {
-            // Solo muestra el título limpio
-            let cleanTitle = slide.title.replace(/<[^>]*>?/gm, '').trim();
-            return `
-              <button class="submenu-btn" onclick="scrollToSlide(${slide.idx})">
-                ${cleanTitle.slice(0, 22)}
-              </button>
-            `;
-          }).join('')}
-        </div>
+  // Botón conceptos y submenú
+  navHTML += `
+    <div class="conceptos-menu">
+      <button class="nav-btn" onclick="showConceptSlides()">Conceptos ▼</button>
+      <div class="conceptos-submenu">
+        ${conceptSlides.map((slide, i) => {
+          let cleanTitle = slide.title.replace(/<[^>]*>?/gm, '').trim();
+          return `
+            <button class="submenu-btn" onclick="showConceptSlides(${i})">
+              ${cleanTitle.slice(0, 22)}
+            </button>
+          `;
+        }).join('')}
       </div>
-    `;
-  }
+    </div>
+  `;
 
   navBar.innerHTML = navHTML;
 
-  // Submenu toggle for mobile (debe ir aquí, después de crear el HTML)
+  // Submenu toggle para móvil
   const conceptosMenu = navBar.querySelector('.conceptos-menu > .nav-btn');
   const conceptosMenuDiv = navBar.querySelector('.conceptos-menu');
   const conceptosSubmenu = navBar.querySelector('.conceptos-submenu');
@@ -146,35 +151,61 @@ function renderNavBar() {
   }
 }
 
-function scrollToSlide(idx) {
-  const slide = document.querySelectorAll('.vertical-slide')[idx];
-  if (slide) {
-    slide.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-}
-
+// Renderiza slides principales o de conceptos
 function renderVerticalSlides() {
   const container = document.getElementById('vertical-slider-container');
   if (!container) return;
   let html = '<div class="vertical-slider">';
-  slides.forEach((slide, idx) => {
+  const slidesToShow = showingConceptsOnly ? conceptSlides : slides;
+  slidesToShow.forEach((slide, idx) => {
+    const isConcept = slide.isConcept;
+    const bgSize = isConcept ? 'cover' : 'contain';
     html += `
-      <div class="vertical-slide" id="slide-${idx}"
+      <div class="vertical-slide" id="slide-${idx}" ${isConcept ? 'data-concept="true"' : ''}
         style="${slide.background ? `
           background-image: url('${slide.background}');
-          background-size: contain;
+          background-size: ${bgSize};
           background-repeat: no-repeat;
           background-position: center;
           background-color: transparent;
         ` : 'background: transparent;'}">
-        <div class="slide-title">${slide.title}</div>
         <img src="${slide.image}" alt="">
+        <div class="slide-title">${slide.title}</div>
         <div class="slide-content">${slide.content}</div>
       </div>
     `;
   });
   html += '</div>';
   container.innerHTML = html;
+}
+
+// Mostrar solo conceptos
+function showConceptSlides(idx) {
+  showingConceptsOnly = true;
+  renderVerticalSlides();
+  setTimeout(() => {
+    const conceptSlidesEls = document.querySelectorAll('.vertical-slide[data-concept="true"]');
+    // Si hay índice, ve a ese concepto; si no, ve al primero
+    const targetIdx = (typeof idx === 'number') ? idx : 0;
+    if (conceptSlidesEls[targetIdx]) {
+      conceptSlidesEls[targetIdx].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 100);
+}
+
+// Mostrar solo slides principales
+function showMainSlides() {
+  showingConceptsOnly = false;
+  renderVerticalSlides();
+}
+
+// Scroll a slide principal
+function scrollToSlide(idx) {
+  if (showingConceptsOnly) return; // Solo permite scroll en modo principal
+  const slide = document.querySelectorAll('.vertical-slide')[idx];
+  if (slide) {
+    slide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -196,9 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
   splashBalon.style.opacity = '1';
   splashLogo.style.display = 'none';
 
-  // Espera a que todas las imágenes de las slides estén cargadas
-  const images = Array.from(document.querySelectorAll('.vertical-slide img'));
-  // Pero como aún no se han renderizado, mejor espera a que se rendericen
+  // Renderiza el contenido ANTES de buscar imágenes
   renderNavBar();
   renderVerticalSlides();
 
