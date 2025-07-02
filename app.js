@@ -29,25 +29,57 @@ const slides = [
     image: "images/Imagen.005.png",
     background: "images/fondo5.png"
   },
+  // Las siguientes slides ya NO llevan la palabra "Concepto" en el título,
+  // pero agregamos una propiedad extra para que sigan apareciendo en el submenú Conceptos
   {
-    title: "Concepto TLATOANI HOOPS",
+    title: "Tlatoani Hoops",
+    isConcept: true,
     content: `
       <p>Este es un posible logo para el Proyecto Deportivo X.</p>
-      <p>Este logo transmite una identidad fuerte y única: orgullo indígena, liderazgo, fuerza y pasión deportiva.</p>
+      <p>"Tlatoani Hoops" es una propuesta de nombre para una academia de básquetbol que combina un término indígena mexicano con un concepto moderno y deportivo.</p>
+
+</p>Tlatoani proviene del Náhuatl y significa “el que habla” o “el que manda”, era el título de los gobernantes o reyes en las culturas Mexicas/Aztecas, tenía autoridad política, militar y espiritual.</p>
+</p>Era el líder máximo.</p>
+
+🏀 ¿Por qué usar “Hoops”?
+Hoops = “aros” en inglés, una forma coloquial de referirse al básquetbol.
+
+Es moderno, se usa en branding de academias, torneos y marcas de ropa deportiva.
+
+</p>¿Qué transmite "Tlatoani Hoops"?</p>
+Liderazgo, grandeza, poder ancestral.
+
+Ideal para una academia que forma no solo jugadores, sino líderes dentro y fuera de la cancha.
+
+Mezcla raíces culturales con identidad deportiva contemporánea.
+</p>
       <p><em>¿Tienes una propuesta de logo? ¡Compártela con nosotros!</em></p>
     `,
-    image: "images/logo001.png", // Cambia la ruta si tu logo está en otro lugar
-    background: "images/fondo_logo.jpg" // Opcional: fondo especial para esta diapositiva
+    image: "images/logo001.png",
+    background: "images/fondo_logo.jpg"
   },
   {
-    title: "Concepto MEXICAS BASKET",
+    title: "Mexicas Basket",
+    isConcept: true,
     content: `
       <p>Este es un posible logo para el Proyecto Deportivo X.</p>
+      <p>Liderazgo ancestral, fuerza en la cancha.</p>
       <p>Este logo proyecta una imagen de orgullo nacional, ferocidad competitiva y raíces culturales profundas.</p>
       <p><em>¿Tienes una propuesta de logo? ¡Compártela con nosotros!</em></p>
     `,
-    image: "images/logo002.png", // Cambia la ruta si tu logo está en otro lugar
-    background: "images/fondo_logo.jpg" // Opcional: fondo especial para esta diapositiva
+    image: "images/logo002.png",
+    background: "images/fondo_logo.jpg"
+  },
+  {
+    title: "Sky Hoops",
+    isConcept: true,
+    content: `
+      <p>¡Presentamos el concepto <strong>Sky Hoops</strong>!</p>
+      <p>Un nombre que evoca altura, sueños y el deseo de alcanzar lo más alto en el deporte y en la vida.</p>
+      <p><em>¿Qué opinas de este concepto? ¡Tus ideas son bienvenidas!</em></p>
+    `,
+    image: "images/sky-hoops.png",
+    background: "images/fondo_logo.jpg"
   }
 ];
 
@@ -57,19 +89,26 @@ function renderNavBar() {
   const navBar = document.getElementById('nav-bar');
   if (!navBar) return;
 
+  // Ahora usamos la propiedad isConcept para el submenú
   const conceptosSlides = slides
     .map((slide, idx) => ({ ...slide, idx }))
-    .filter(slide => slide.title && slide.title.toLowerCase().includes('concepto'));
+    .filter(slide => slide.isConcept);
 
   const normalSlides = slides
     .map((slide, idx) => ({ ...slide, idx }))
-    .filter(slide => !(slide.title && slide.title.toLowerCase().includes('concepto')));
+    .filter(slide => !slide.isConcept);
 
-  let navHTML = normalSlides.map(slide => `
+  let navHTML = normalSlides.map(slide => {
+    // Si el título contiene "bienvenidos", solo muestra "Bienvenidos"
+    let btnText = /bienvenidos/i.test(slide.title)
+      ? "Bienvenidos"
+      : slide.title.replace(/<[^>]*>?/gm, '').slice(0, 18);
+    return `
       <button class="nav-btn" onclick="scrollToSlide(${slide.idx})">
-        ${slide.title.replace(/<[^>]*>?/gm, '').slice(0, 18)}
+        ${btnText}
       </button>
-    `).join('');
+    `;
+  }).join('');
 
   // Solo agrega el botón Conceptos si hay diapositivas de conceptos
   if (conceptosSlides.length > 0) {
@@ -77,11 +116,15 @@ function renderNavBar() {
       <div class="conceptos-menu">
         <button class="nav-btn" tabindex="0">Conceptos ▼</button>
         <div class="conceptos-submenu">
-          ${conceptosSlides.map(slide => `
-            <button class="submenu-btn" onclick="scrollToSlide(${slide.idx})">
-              ${slide.title.replace(/<[^>]*>?/gm, '').slice(0, 22)}
-            </button>
-          `).join('')}
+          ${conceptosSlides.map(slide => {
+            // Solo muestra el título limpio
+            let cleanTitle = slide.title.replace(/<[^>]*>?/gm, '').trim();
+            return `
+              <button class="submenu-btn" onclick="scrollToSlide(${slide.idx})">
+                ${cleanTitle.slice(0, 22)}
+              </button>
+            `;
+          }).join('')}
         </div>
       </div>
     `;
@@ -159,16 +202,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // Cierra menú y submenús al hacer clic en cualquier botón
     navBar.addEventListener('click', (e) => {
-      if (
-        e.target.classList.contains('nav-btn') ||
-        e.target.classList.contains('submenu-btn')
-      ) {
+      // Detecta si es móvil/tablet
+      const isMobile = window.innerWidth <= 1024;
+      // Si es botón del submenú, cierra el menú (comportamiento normal)
+      if (e.target.classList.contains('submenu-btn')) {
         navBar.classList.remove('open');
-        // Cierra todos los submenús de conceptos (en cualquier dispositivo)
         document.querySelectorAll('.conceptos-menu.open').forEach(menu => {
           menu.classList.remove('open');
         });
-        // Además, si hay un submenú abierto por hover, lo oculta forzando el blur
+        if (document.activeElement) document.activeElement.blur();
+      }
+      // Si es botón principal del menú (pero NO el de conceptos en móvil), cierra el menú
+      else if (
+        e.target.classList.contains('nav-btn') &&
+        (!isMobile || e.target.textContent.trim() !== "Conceptos ▼")
+      ) {
+        navBar.classList.remove('open');
+        document.querySelectorAll('.conceptos-menu.open').forEach(menu => {
+          menu.classList.remove('open');
+        });
         if (document.activeElement) document.activeElement.blur();
       }
     });
