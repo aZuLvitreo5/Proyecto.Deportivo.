@@ -52,9 +52,12 @@
       overflow: hidden;
     }
     .logo-container img {
-      max-width: 100%;
-      max-height: 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Así la imagen llena el contenedor sin deformarse */
       display: block;
+      border-radius: 0;  /* Igual que el contenedor */
+      background: transparent;
     }
     .header-text {
       font-size: 1.5rem;
@@ -153,6 +156,42 @@
         max-width: 90vw;
         max-height: 24vh;
       }
+      .menu-toggle {
+    display: flex;
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    width: 54px;
+    height: 54px;
+    background: #23272e;
+    border: 2px solid #43e97b;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18), 0 0 0 4px #fff8;
+    z-index: 3000;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    transition: background 0.2s, border 0.2s;
+  }
+  .menu-toggle span {
+    width: 32px;
+    height: 5px;
+    background: #43e97b;
+    border-radius: 3px;
+    margin: 0 0 6px 0;
+    box-shadow: 0 1px 4px #0006;
+    transition: background 0.2s;
+  }
+  .menu-toggle span:last-child {
+    margin-bottom: 0;
+  }
+  .menu-toggle:focus, .menu-toggle:hover {
+    background: #38f9d7;
+    border-color: #de0707;
+  }
+  .menu-toggle:focus span, .menu-toggle:hover span {
+    background: #de0707;
+  }
     }
     .slide-container {
       background: #333;
@@ -398,22 +437,23 @@
       .nav-bar {
         top: 80px;
         grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+        background: #23272e !important; /* Sin transparencia */
       }
-      .nav-btn {
-        font-size: 0.95rem;
-        padding: 12px 0;
+      .nav-btn, .submenu-btn {
+        background: #43e97b !important; /* Fondo sólido */
+        color: #23272e !important;
+        opacity: 1 !important;
+        box-shadow: 0 2px 8px rgba(67,233,123,0.12);
       }
-      .slide-title {
-        font-size: 1.2rem;
-        padding: 8px 10px;
+      .nav-btn.active, .submenu-btn.active {
+        background: linear-gradient(90deg, #de0707, #ff9800) !important;
+        color: #fff !important;
+        opacity: 1 !important;
       }
-      .slide-content {
-        font-size: 1rem;
-        padding: 8px 10px;
-      }
-      .vertical-slide > img {
-        max-width: 90vw;
-        max-height: 24vh;
+      .conceptos-menu,
+      .conceptos-submenu {
+        background: #23272e !important;
+        opacity: 1 !important;
       }
     }
     .slide-container {
@@ -631,9 +671,43 @@
 
     @media (max-width: 600px) {
       .menu-toggle {
-        display: flex;
-      }
-      .nav-bar {
+    display: flex;
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    width: 54px;
+    height: 54px;
+    background: #23272e;
+    border: 2px solid #43e97b;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18), 0 0 0 4px #fff8;
+    z-index: 3000;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    transition: background 0.2s, border 0.2s;
+  }
+  .menu-toggle span {
+    width: 32px;
+    height: 5px;
+    background: #43e97b;
+    border-radius: 3px;
+    margin: 0 0 6px 0;
+    box-shadow: 0 1px 4px #0006;
+    transition: background 0.2s;
+  }
+  .menu-toggle span:last-child {
+    margin-bottom: 0;
+  }
+  .menu-toggle:focus, .menu-toggle:hover {
+    background: #38f9d7;
+    border-color: #de0707;
+  }
+  .menu-toggle:focus span, .menu-toggle:hover span {
+    background: #de0707;
+  }
+    }
+    .nav-bar {
   width: 100vw;
   z-index: 999;
   background: #23272eaa;
@@ -642,8 +716,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: 0;
-  opacity: 1;
-  pointer-events: auto;
+  opacity: 0;
+  pointer-events: none;
   transition: opacity 0.4s;
 }
       .nav-bar.open {
@@ -679,7 +753,7 @@
       .conceptos-menu.open .conceptos-submenu {
         display: flex !important;
       }
-    }
+    
     
 /* Área sensible para mostrar la nav-bar al acercar el mouse */
 .nav-hover-area {
@@ -806,8 +880,8 @@
 .nav-hover-area:hover + .nav-bar,
 .nav-bar:hover,
 .nav-bar:focus-within {
-  opacity: 1;
-  pointer-events: auto;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 @media (max-width: 1024px) {
@@ -868,6 +942,84 @@
   .vertical-slide[data-concept="true"] {
     padding-top: 120px; /* Un poco más en móvil si el menú es más alto */
   }
+  .vertical-slide[data-concept="true"] .slide-title {
+    font-size: 1.1rem;
+    padding: 6px 8px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    border-radius: 10px;
+  }
+  .vertical-slide[data-concept="true"] .slide-content {
+    font-size: 0.95rem;
+    padding: 8px 8px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+  }
+  .vertical-slide[data-concept="true"] > img {
+    max-width: 80vw;
+    max-height: 22vh;
+    padding: 6px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+  .conceptos-btn {
+    font-size: 1rem;
+    padding: 10px 16px;
+    margin-top: 16px;
+    border-radius: 10px;
+  }
+}
+.show-more-btn, .show-less-btn {
+  background: none;
+  border: none;
+  color: #43e97b;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 8px;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+.show-more-btn:hover, .show-less-btn:hover {
+  color: #de0707;
+}
+.concept-bg-box {
+  background: rgba(67, 67, 70, 0.35);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(70, 74, 84, 0.13);
+  padding: 32px 24px;
+  margin: 0 auto 24px auto;
+  max-width: 900px;
+  width: 95%;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* Elimina cualquier max-height u overflow aquí */
+}
+
+/* Permite que la slide crezca según el contenido */
+.vertical-slide[data-concept="true"] {
+  min-height: unset;
+  height: auto;
+  padding-bottom: 64px; /* Espacio extra si quieres separación inferior */
+}
+
+/* El texto largo y el botón siempre visibles */
+.slide-content-full {
+  padding: 16px 0 56px 0 !important;
+  margin-bottom: 0 !important;
+  box-sizing: border-box;
+  /* Elimina cualquier max-height u overflow aquí */
+}
+.vertical-slide[data-concept="true"] .slide-content,
+.vertical-slide[data-concept="true"] .slide-content-short,
+.vertical-slide[data-concept="true"] .slide-content-full {
+  background: none !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
   </style>
 </head>

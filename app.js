@@ -121,7 +121,7 @@ function renderNavBar() {
   // Botón conceptos y submenú
   navHTML += `
     <div class="conceptos-menu">
-      <button class="nav-btn" onclick="showConceptSlides()">Conceptos ▼</button>
+      <button class="nav-btn conceptos-toggle-btn">Conceptos ▼</button>
       <div class="conceptos-submenu">
         ${conceptSlides.map((slide, i) => {
           let cleanTitle = slide.title.replace(/<[^>]*>?/gm, '').trim();
@@ -138,7 +138,7 @@ function renderNavBar() {
   navBar.innerHTML = navHTML;
 
   // Submenu toggle para móvil
-  const conceptosMenu = navBar.querySelector('.conceptos-menu > .nav-btn');
+  const conceptosMenu = navBar.querySelector('.conceptos-toggle-btn');
   const conceptosMenuDiv = navBar.querySelector('.conceptos-menu');
   const conceptosSubmenu = navBar.querySelector('.conceptos-submenu');
   if (conceptosMenu && conceptosSubmenu && conceptosMenuDiv) {
@@ -146,6 +146,8 @@ function renderNavBar() {
       if (window.innerWidth <= 600) {
         e.preventDefault();
         conceptosMenuDiv.classList.toggle('open');
+      } else {
+        showConceptSlides();
       }
     });
   }
@@ -160,6 +162,38 @@ function renderVerticalSlides() {
   slidesToShow.forEach((slide, idx) => {
     const isConcept = slide.isConcept;
     const bgSize = isConcept ? 'cover' : 'contain';
+
+    // --- NUEVO: Lógica para mostrar más en textos largos ---
+    let content = slide.content;
+    let showMore = false;
+    const maxLength = 420; // Puedes ajustar el límite de caracteres
+
+    // Solo aplica a slides de conceptos y si el texto es largo
+    if (isConcept && content.replace(/<[^>]+>/g, '').length > maxLength) {
+      showMore = true;
+      let visibleText = content.replace(/(<([^>]+)>)/gi, '').slice(0, maxLength);
+      let cutIdx = content.indexOf(visibleText) + visibleText.length;
+      let nextPClose = content.indexOf('</p>', cutIdx);
+      if (nextPClose !== -1) cutIdx = nextPClose + 4;
+      let shortContent = content.slice(0, cutIdx);
+
+      content = `
+        <div class="concept-bg-box">
+          <div class="slide-content-short">${shortContent}
+            <button class="show-more-btn" data-slide="${idx}">Mostrar más...</button>
+          </div>
+          <div class="slide-content-full" style="display:none;">
+            ${slide.content}
+            <button class="show-less-btn" data-slide="${idx}">Mostrar menos</button>
+          </div>
+        </div>
+      `;
+    } else if (isConcept) {
+      content = `<div class="concept-bg-box"><div class="slide-content">${slide.content}</div></div>`;
+    } else {
+      content = `<div class="slide-content">${slide.content}</div>`;
+    }
+
     html += `
       <div class="vertical-slide" id="slide-${idx}" ${isConcept ? 'data-concept="true"' : ''}
         style="${slide.background ? `
@@ -171,12 +205,34 @@ function renderVerticalSlides() {
         ` : 'background: transparent;'}">
         <img src="${slide.image}" alt="">
         <div class="slide-title">${slide.title}</div>
-        <div class="slide-content">${slide.content}</div>
+        ${content}
       </div>
     `;
   });
   html += '</div>';
   container.innerHTML = html;
+
+  // --- NUEVO: Listeners para mostrar más/menos ---
+  document.querySelectorAll('.show-more-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const idx = this.getAttribute('data-slide');
+      const slide = document.getElementById('slide-' + idx);
+      if (slide) {
+        slide.querySelector('.slide-content-short').style.display = 'none';
+        slide.querySelector('.slide-content-full').style.display = 'block';
+      }
+    });
+  });
+  document.querySelectorAll('.show-less-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const idx = this.getAttribute('data-slide');
+      const slide = document.getElementById('slide-' + idx);
+      if (slide) {
+        slide.querySelector('.slide-content-short').style.display = 'block';
+        slide.querySelector('.slide-content-full').style.display = 'none';
+      }
+    });
+  });
 }
 
 // Mostrar solo conceptos
@@ -236,6 +292,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let loaded = 0;
   const total = slideImages.length;
 
+  // --- NUEVO: Guarda el tiempo de inicio ---
+  const splashStart = Date.now();
+
   if (total === 0) finishLoading();
   else {
     slideImages.forEach(img => {
@@ -256,7 +315,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function finishLoading() {
-    // Espera un pequeño tiempo extra para UX (opcional)
+    // --- NUEVO: Calcula cuánto falta para 3 segundos ---
+    const elapsed = Date.now() - splashStart;
+    const minSplash = 3000; // 3 segundos
+    const wait = Math.max(0, minSplash - elapsed);
+
     setTimeout(() => {
       splashBalon.style.opacity = '0';
       setTimeout(() => {
@@ -273,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }, 800);
         }, 1800); // Duración del splash del logo
       }, 800);
-    }, 400); // Espera extra opcional tras cargar todo
+    }, wait); // Espera lo necesario para completar 3 segundos
   }
 
   // Menu toggle for mobile
@@ -341,4 +404,3 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', updateNavBarPosition);
   updateNavBarPosition();
 });
-
