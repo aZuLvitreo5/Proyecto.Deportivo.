@@ -8,10 +8,16 @@ const slides = [
     background: "images/fondo1.png"
   },
   {
-    title: "Nuestros Objetivos",
-    content: "Promover la salud, la inclusión y el desarrollo personal a través del deporte.",
+    title: "Misión",
+    content: "<p>Formar personas y atletas a través del baloncesto, promoviendo el desarrollo físico, mental y emocional en un entorno inclusivo, competitivo y con identidad cultural. En Proyecto Deportivo X impulsamos valores como la disciplina, el trabajo en equipo y el respeto, guiando a nuestros jugadores desde la iniciación deportiva hasta el alto rendimiento.</p>",
     image: "images/Imagen.002.jpg",
     background: "images/fondo2.png"
+  },
+  {
+    title: "Visión",
+    content: "<p>Ser una academia de referencia a nivel regional y nacional en la formación integral de jugadores de baloncesto, destacando por su excelencia técnica, sentido comunitario y por honrar la fuerza, el legado y el espíritu competitivo como símbolo de identidad y poder.<p>",
+    image: "images/Imagen.009.jpg",
+     background: "images/fondo2.png"
   },
   {
     title: "¡Participa!",
@@ -23,6 +29,47 @@ const slides = [
     title: "¿Por qué X?",
     content: "Porque queremos escuchar todas las opiniones, aquí tod@s somos tomad@s en cuenta, queremos establecer contigo los valores, los objetivos y los alcances de este Proyecto, así cómo el nombre del equipo, el color del uniforme y todas esas cosas que van sumando para hacer una gran familia deportiva.",
     image: "images/Imagen.004.png",
+    background: "images/fondo4.png"
+  },
+  {
+    title: "Valores Institucionales",
+    content: `
+      <p><strong>1. Disciplina:</strong><br>
+      La constancia vence al talento.</p>
+      <p><strong>2. Trabajo en equipo:</strong><br>
+      Ningún jugador gana solo.</p>
+      <p><strong>3. Respeto:</strong><br>
+      Por el rival, los entrenadores y uno mismo.</p>
+      <p><strong>4. Identidad y orgullo cultural:</strong><br>
+      Honramos nuestras raíces.</p>
+      <p><strong>5. Esfuerzo y superación:</strong><br>
+      Siempre mejor que ayer.</p>
+      <p><strong>6. Pasión por el baloncesto:</strong><br>
+      Jugamos con el corazón.</p>
+      <p><strong>7. Inclusión:</strong><br>
+      Espacio para todas las edades y géneros.</p>
+    `,
+    background: "images/fondo4.png"
+  },
+  {
+    title: "Reglamento interno (versión preliminar)",
+    content: `
+      <p><strong>1. Compromiso:</strong><br>
+      - Asistencia puntual obligatoria.<br>
+      - 80% mínimo para competir.</p>
+      <p><strong>2. Respeto:</strong><br>
+      - Prohibido insultar o faltar al respeto.<br>
+      - Fomentar el lenguaje positivo.</p>
+      <p><strong>3. Presentación personal:</strong><br>
+      - Uniforme completo requerido.<br>
+      - Sin accesorios distractores.</p>
+      <p><strong>4. Uso del espacio:</strong><br>
+      - Cuidar instalaciones y equipo utilizado.<br>
+      - Recoger material tras entrenar.</p>
+      <p><strong>5. Redes sociales:</strong><br>
+      - Reflejar valores de la academia.<br>
+      - No se toleran publicaciones ofensivas.</p>
+    `,
     background: "images/fondo4.png"
   },
   {
