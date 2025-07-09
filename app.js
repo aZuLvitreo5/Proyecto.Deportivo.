@@ -111,8 +111,6 @@ const conceptSlides = [
     content: `
       <p>¿Tienes una idea para el logo o el nombre del proyecto?</p>
       <p><strong>¡Queremos conocer tu propuesta!</strong></p>
-      <p>Muy pronto podrás enviarnos tu concepto y ser parte de la identidad de este proyecto deportivo.</p>
-      <p>¡Mantente pendiente!</p>
       <a href="formulario.html" target="_blank" class="conceptos-btn" style="margin-top:24px;display:inline-block;">Proponer logo</a>
     `,
     image: "images/ideas-concepto.png",

@@ -109,6 +109,14 @@
   </style>
 </head>
 <body>
+  <div id="alerta-prueba" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:rgba(44,47,54,0.65);display:flex;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:14px;box-shadow:0 4px 24px #0002;padding:32px 24px;max-width:320px;text-align:center;">
+      <p style="color:#23272e;font-size:1.1em;margin-bottom:18px;">
+        El envío de logos está en fase de prueba.<br>Es probable encontrar errores.
+      </p>
+      <button id="btn-entendido" style="background:linear-gradient(90deg,#43e97b 0%,#38f9d7 100%);color:#23272e;border:none;border-radius:8px;padding:10px 28px;font-size:1.05em;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #43e97b22;">Entendido</button>
+    </div>
+  </div>
   <div class="form-container">
     <h1>Proponer logo</h1>
     <form id="logo-form">
@@ -123,10 +131,8 @@
     </p>
   </div>
 
-  <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -134,80 +140,75 @@
       authDomain: "TU_DOMINIO.firebaseapp.com",
       projectId: "TU_PROJECT_ID",
       storageBucket: "TU_BUCKET.appspot.com",
-      messagingSenderId: "XXXXXX",
+      messagingSenderId: "XXXX",
       appId: "TU_APP_ID"
     };
 
     const app = initializeApp(firebaseConfig);
-    const storage = getStorage(app);
     const db = getFirestore(app);
 
     const form = document.getElementById('logo-form');
     const fileInput = document.getElementById('logo-input');
     const descInput = document.getElementById('description');
     const status = document.getElementById('status');
-    const backBtn = document.getElementById('back-to-concepts');
-    const previewContainer = document.getElementById('preview-container');
 
-    fileInput.addEventListener('change', () => {
-      previewContainer.innerHTML = '';
-      Array.from(fileInput.files).forEach(file => {
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = e => {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.maxWidth = '80px';
-            img.style.maxHeight = '80px';
-            img.style.borderRadius = '8px';
-            img.style.boxShadow = '0 2px 8px #0002';
-            previewContainer.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-    });
+    // ✅ Client ID de prueba para Imgur
+    const IMGUR_CLIENT_ID = '54679fccc7f4b9a'; // ⚠️ Solo para pruebas
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const files = Array.from(fileInput.files);
+      const file = fileInput.files[0];
       const description = descInput.value;
 
-      if (!files.length || !description) return;
+      if (!file || !description) {
+        status.textContent = "Faltan datos";
+        return;
+      }
 
       status.textContent = "Subiendo...";
 
       try {
-        const urls = [];
-        for (const file of files) {
-          const fileRef = ref(storage, 'logos/' + Date.now() + '-' + file.name);
-          await uploadBytes(fileRef, file);
-          const url = await getDownloadURL(fileRef);
-          urls.push(url);
-        }
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const base64 = reader.result.split(',')[1];
 
-        await addDoc(collection(db, "logos"), {
-          imageUrls: urls,
-          description: description,
-          timestamp: new Date()
-        });
+          const response = await fetch("https://api.imgur.com/3/image", {
+            method: "POST",
+            headers: {
+              Authorization: `Client-ID ${IMGUR_CLIENT_ID}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ image: base64, type: 'base64' })
+          });
 
-        status.textContent = "¡Logo(s) enviado(s) con éxito!";
-        form.reset();
-        previewContainer.innerHTML = '';
+          const data = await response.json();
+          if (!data.success) throw new Error("No se pudo subir la imagen");
+
+          const imageUrl = data.data.link;
+          console.log("Imagen en Imgur:", imageUrl);
+
+          await addDoc(collection(db, "logos"), {
+            imageUrl,
+            description,
+            timestamp: new Date()
+          });
+
+          status.textContent = "¡Logo enviado con éxito!";
+          form.reset();
+        };
+
+        reader.readAsDataURL(file);
+
       } catch (error) {
-        console.error(error);
-        status.textContent = "Ocurrió un error.";
+        console.error("Error:", error);
+        status.textContent = "Ocurrió un error. Mira la consola.";
       }
     });
-
-    backBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (confirm("¿Seguro que quieres descartar tu logo?")) {
-        window.close(); // Intenta cerrar la pestaña si fue abierta por JS
-        window.location.href = "index.html"; // Si no se puede cerrar, regresa a la página principal
-      }
-    });
+  </script>
+  <script>
+    document.getElementById('btn-entendido').onclick = function() {
+      document.getElementById('alerta-prueba').style.display = 'none';
+    };
   </script>
 </body>
 </html>
