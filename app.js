@@ -44,22 +44,16 @@ const conceptSlides = [
     content: `
       <p>Este es un posible logo para el Proyecto Deportivo X.</p>
       <p>"Tlatoani Hoops" es una propuesta de nombre para una academia de básquetbol que combina un término indígena mexicano con un concepto moderno y deportivo.</p>
-
-</p>Tlatoani proviene del Náhuatl y significa “el que habla” o “el que manda”, era el título de los gobernantes o reyes en las culturas Mexicas/Aztecas, tenía autoridad política, militar y espiritual.</p>
-</p>Era el líder máximo.</p>
-
-🏀 ¿Por qué usar “Hoops”?
-Hoops = “aros” en inglés, una forma coloquial de referirse al básquetbol.
-
-Es moderno, se usa en branding de academias, torneos y marcas de ropa deportiva.
-
-</p>¿Qué transmite "Tlatoani Hoops"?</p>
-Liderazgo, grandeza, poder ancestral.
-
-Ideal para una academia que forma no solo jugadores, sino líderes dentro y fuera de la cancha.
-
-Mezcla raíces culturales con identidad deportiva contemporánea.
-</p>
+      </p>Tlatoani proviene del Náhuatl y significa “el que habla” o “el que manda”, era el título de los gobernantes o reyes en las culturas Mexicas/Aztecas, tenía autoridad política, militar y espiritual.</p>
+      </p>Era el líder máximo.</p>
+      🏀 ¿Por qué usar “Hoops”?
+      Hoops = “aros” en inglés, una forma coloquial de referirse al básquetbol.
+      Es moderno, se usa en branding de academias, torneos y marcas de ropa deportiva.
+      </p>¿Qué transmite "Tlatoani Hoops"?</p>
+      Liderazgo, grandeza, poder ancestral.
+      Ideal para una academia que forma no solo jugadores, sino líderes dentro y fuera de la cancha.
+      Mezcla raíces culturales con identidad deportiva contemporánea.
+      </p>
     `,
     image: "images/logo001.png",
     background: "images/fondo_logo.jpg"
@@ -68,9 +62,9 @@ Mezcla raíces culturales con identidad deportiva contemporánea.
     title: "Mexicas Basket",
     isConcept: true,
     content: `
-      <p>Este es un posible logo para el Proyecto Deportivo X.</p>
-      <p>Liderazgo ancestral, fuerza en la cancha.</p>
-      <p>Este logo proyecta una imagen de orgullo nacional, ferocidad competitiva y raíces culturales profundas.</p>
+      <p>"Mexicas Basket" es una propuesta de nombre para una academia de básquetbol que combina un término indígena mexicano con un concepto moderno y deportivo.</p>
+      <p>Mexicas es el Nombre  Náhuatl del pueblo Azteca y hace referencia a una sociedad organizada, guerrera y ancestral. Este titulo de las cultura Mexica/Azteca, deja ver  autoridad política, militar y espiritual. </p>
+      <p>¿Qué transmite “Mexicas Basket”?Liderazgo, grandeza, poder ancestral. Ideal para una academia que forma no solo jugadores, sino líderes dentro y fuera de la cancha. Mezcla raíces culturales con identidad deportiva contemporánea.</p>
       <p><em>¿Tienes una propuesta de logo? ¡Compártela con nosotros!</em></p>
     `,
     image: "images/logo002.png",
@@ -88,6 +82,30 @@ Mezcla raíces culturales con identidad deportiva contemporánea.
     background: "images/fondo_logo.jpg"
   },
   {
+    title: "HillWalkers",
+    isConcept: true,
+    content: `
+      <p>Este Nombre e identidad busca un enfoque en la colina de las Alamedas, donde para llegar a la cancha, se tiene que caminar. </p>
+      <p>Busca ser llamativo para los niños y puedan buscar su identidad propia,  HillWalkers significa “Los que caminan colinas” </p>
+      <p>Que Transmite?  Fiereza, Liderazgo, Trabajo y esfuerzo, el camino hacía la cima, enfocado en mejora continúa. </p>
+      <p><em>¿Te identificas con este concepto? ¡Cuéntanos tu opinión!</em></p>
+    `,
+    image: "images/hill-walkers.png", 
+    background: "images/fondo_logo.jpg"
+  },
+  {
+  title: "Jaguares Basket",
+  isConcept: true,
+  content: `
+    <p>Jaguares Basket" es una propuesta de nombre para una academia de básquetbol que combina un término indígena de un guerrero mexica con un concepto moderno y deportivo y el alma de un felino.</p>
+    <p>Jaguares es el Nombre de un felino y se conjuga con la fiereza de de un guerrero azteca/Mexica de gran nobleza militar. hace referencia a una sociedad militar organizada, guerrera y ancestral. Deja ver  autoridad política, militar y espiritual. </p>
+    <p>¿Qué transmite “Jaguares Basket”? Liderazgo, grandeza, poder ancestral. Ideal para una academia que forma no solo jugadores, sino líderes dentro y fuera de la cancha. Mezcla raíces culturales con identidad deportiva contemporánea.</p>
+    <p><em>¿Qué te inspira este concepto? ¡Compártelo con nosotros!</em></p>
+  `,
+  image: "images/jaguares.png", // Cambia la ruta si tienes una imagen específica
+  background: "images/fondo_logo.jpg"
+},
+  {
     title: "¡Envía tu concepto!",
     isConcept: true,
     content: `
@@ -95,8 +113,9 @@ Mezcla raíces culturales con identidad deportiva contemporánea.
       <p><strong>¡Queremos conocer tu propuesta!</strong></p>
       <p>Muy pronto podrás enviarnos tu concepto y ser parte de la identidad de este proyecto deportivo.</p>
       <p>¡Mantente pendiente!</p>
+      <a href="formulario.html" target="_blank" class="conceptos-btn" style="margin-top:24px;display:inline-block;">Proponer logo</a>
     `,
-    image: "images/ideas-concepto.png", // Puedes cambiar la imagen o dejarla vacía si prefieres
+    image: "images/ideas-concepto.png",
     background: "images/fondo_logo.jpg"
   }
 ];
@@ -165,18 +184,22 @@ function renderVerticalSlides() {
 
     // --- NUEVO: Lógica para mostrar más en textos largos ---
     let content = slide.content;
-    let showMore = false;
-    const maxLength = 420; // Puedes ajustar el límite de caracteres
+const maxLength = 420; // Puedes ajustar el límite de caracteres
 
-    // Solo aplica a slides de conceptos y si el texto es largo
-    if (isConcept && content.replace(/<[^>]+>/g, '').length > maxLength) {
-      showMore = true;
-      let visibleText = content.replace(/(<([^>]+)>)/gi, '').slice(0, maxLength);
-      let cutIdx = content.indexOf(visibleText) + visibleText.length;
-      let nextPClose = content.indexOf('</p>', cutIdx);
-      if (nextPClose !== -1) cutIdx = nextPClose + 4;
-      let shortContent = content.slice(0, cutIdx);
+if (isConcept) {
+  // Quita etiquetas HTML para contar solo texto
+  const plainText = content.replace(/<[^>]+>/g, '');
+  if (plainText.length > maxLength) {
+    // Solo muestra el botón si hay texto oculto
+    let visibleText = plainText.slice(0, maxLength);
+    let cutIdx = content.indexOf(visibleText) + visibleText.length;
+    let nextPClose = content.indexOf('</p>', cutIdx);
+    if (nextPClose !== -1) cutIdx = nextPClose + 4;
+    let shortContent = content.slice(0, cutIdx);
 
+    // Verifica si realmente hay texto oculto
+    const shortPlain = shortContent.replace(/<[^>]+>/g, '').trim();
+    if (shortPlain.length < plainText.trim().length) {
       content = `
         <div class="concept-bg-box">
           <div class="slide-content-short">${shortContent}
@@ -188,11 +211,16 @@ function renderVerticalSlides() {
           </div>
         </div>
       `;
-    } else if (isConcept) {
-      content = `<div class="concept-bg-box"><div class="slide-content">${slide.content}</div></div>`;
     } else {
-      content = `<div class="slide-content">${slide.content}</div>`;
+      // Si no hay texto oculto, muestra todo sin botón
+      content = `<div class="concept-bg-box"><div class="slide-content">${slide.content}</div></div>`;
     }
+  } else {
+    content = `<div class="concept-bg-box"><div class="slide-content">${slide.content}</div></div>`;
+  }
+} else {
+  content = `<div class="slide-content">${slide.content}</div>`;
+}
 
     html += `
       <div class="vertical-slide" id="slide-${idx}" ${isConcept ? 'data-concept="true"' : ''}

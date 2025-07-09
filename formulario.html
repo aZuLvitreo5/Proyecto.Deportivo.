@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Sube tu logo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: linear-gradient(135deg, #e0f7fa 0%, #f8fafc 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .form-container {
+      background: rgba(67, 67, 70, 0.10);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(44,47,54,0.10);
+      padding: 32px 24px 24px 24px;
+      margin-top: 48px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: #23272e;
+      margin-bottom: 24px;
+      font-size: 1.7rem;
+      text-align: center;
+    }
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    input[type="file"] {
+      background: #fff;
+      border: 1px solid #bdbdbd;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 1rem;
+    }
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      border-radius: 8px;
+      border: 1px solid #bdbdbd;
+      padding: 10px;
+      font-size: 1rem;
+      resize: vertical;
+      background: #fff;
+    }
+    button[type="submit"], .back-btn {
+      background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+      color: #23272e;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, color 0.2s;
+      width: 100%;
+      box-shadow: 0 2px 8px #43e97b22;
+    }
+    button[type="submit"]:hover, .back-btn:hover {
+      background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+      color: #111;
+    }
+    .back-btn {
+      background: #fff;
+      color: #43e97b;
+      border: 2px solid #43e97b;
+      margin-top: 18px;
+      margin-bottom: 0;
+      box-shadow: none;
+      transition: background 0.2s, color 0.2s, border 0.2s;
+    }
+    .back-btn:hover {
+      background: #43e97b;
+      color: #fff;
+      border: 2px solid #43e97b;
+    }
+    #status {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 1rem;
+      color: #1976d2;
+      min-height: 24px;
+    }
+    @media (max-width: 600px) {
+      .form-container {
+        margin-top: 18px;
+        padding: 18px 6px 16px 6px;
+        max-width: 98vw;
+      }
+      h1 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Proponer logo</h1>
+    <form id="logo-form">
+      <input type="file" id="logo-input" accept="image/*" required multiple>
+      <textarea id="description" placeholder="Describe tu idea de logo" required></textarea>
+      <button type="submit">Enviar</button>
+    </form>
+    <p id="status"></p>
+    <div id="preview-container" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;"></div>
+    <p style="margin-top:18px;font-size:0.98em;color:#666;text-align:center;max-width:340px;opacity:0.85;">
+      Los logos subidos son revisados y posteriormente publicados. Este proceso puede tardar de 2 a 5 días aproximadamente.
+    </p>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_DOMINIO.firebaseapp.com",
+      projectId: "TU_PROJECT_ID",
+      storageBucket: "TU_BUCKET.appspot.com",
+      messagingSenderId: "XXXXXX",
+      appId: "TU_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('logo-form');
+    const fileInput = document.getElementById('logo-input');
+    const descInput = document.getElementById('description');
+    const status = document.getElementById('status');
+    const backBtn = document.getElementById('back-to-concepts');
+    const previewContainer = document.getElementById('preview-container');
+
+    fileInput.addEventListener('change', () => {
+      previewContainer.innerHTML = '';
+      Array.from(fileInput.files).forEach(file => {
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.maxWidth = '80px';
+            img.style.maxHeight = '80px';
+            img.style.borderRadius = '8px';
+            img.style.boxShadow = '0 2px 8px #0002';
+            previewContainer.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const files = Array.from(fileInput.files);
+      const description = descInput.value;
+
+      if (!files.length || !description) return;
+
+      status.textContent = "Subiendo...";
+
+      try {
+        const urls = [];
+        for (const file of files) {
+          const fileRef = ref(storage, 'logos/' + Date.now() + '-' + file.name);
+          await uploadBytes(fileRef, file);
+          const url = await getDownloadURL(fileRef);
+          urls.push(url);
+        }
+
+        await addDoc(collection(db, "logos"), {
+          imageUrls: urls,
+          description: description,
+          timestamp: new Date()
+        });
+
+        status.textContent = "¡Logo(s) enviado(s) con éxito!";
+        form.reset();
+        previewContainer.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+        status.textContent = "Ocurrió un error.";
+      }
+    });
+
+    backBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (confirm("¿Seguro que quieres descartar tu logo?")) {
+        window.close(); // Intenta cerrar la pestaña si fue abierta por JS
+        window.location.href = "index.html"; // Si no se puede cerrar, regresa a la página principal
+      }
+    });
+  </script>
+</body>
+</html>
