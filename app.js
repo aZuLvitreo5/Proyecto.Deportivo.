@@ -121,9 +121,10 @@ const conceptSlides = [
     title: "Sky Hoops",
     isConcept: true,
     content: `
-      <p>¡Presentamos el concepto <strong>Sky Hoops</strong>!</p>
-      <p>Un nombre que evoca altura, sueños y el deseo de alcanzar lo más alto en el deporte y en la vida.</p>
-      <p><em>¿Qué opinas de este concepto? ¡Tus ideas son bienvenidas!</em></p>
+      <p>Sky Hoops significa “Aros en el Cielo”</p>
+      <p>Este nombre e identidad buscan un enfoque en el sentido de soñar con volar y alcanzar los aros. Refleja unas alas, que te permiten lograr los objetivos con la fuerza de un corcel.</p>
+      <p>Busca ser llamativo para los niños y puedan buscar su identidad propia</p>
+      <p>¿Qué transmite?  sueños, volar, fiereza, liderazgo, trabajo y esfuerzo, el camino hacía el cielo, enfocado en alcanzar objetivos a corto, mediano y largo plazo. </p>
     `,
     image: "images/sky-hoops.png",
     background: "images/fondo_logo.jpg"
