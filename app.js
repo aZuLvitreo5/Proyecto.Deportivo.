@@ -1,4 +1,5 @@
 let showingConceptsOnly = false;
+let showingConceptMenuOnly = false; // NUEVO
 
 const slides = [
   {
@@ -16,7 +17,6 @@ const slides = [
   {
     title: "Visión",
     content: "<p>Ser una academia de referencia a nivel regional y nacional en la formación integral de jugadores de baloncesto, destacando por su excelencia técnica, sentido comunitario y por honrar la fuerza, el legado y el espíritu competitivo como símbolo de identidad y poder.<p>",
-    image: "images/Imagen.009.jpg",
      background: "images/fondo2.png"
   },
   {
@@ -172,6 +172,43 @@ function renderNavBar() {
   const navBar = document.getElementById('nav-bar');
   if (!navBar) return;
 
+  // Si estamos mostrando solo el menú de conceptos en móvil
+  if (showingConceptMenuOnly && window.innerWidth <= 600) {
+    let navHTML = `
+      <button class="nav-btn conceptos-toggle-btn" style="font-weight:bold;">Conceptos ▲</button>
+      ${conceptSlides.map((slide, i) => {
+        let cleanTitle = slide.title.replace(/<[^>]*>?/gm, '').trim();
+        return `
+          <button class="submenu-btn" onclick="showConceptSlides(${i}); closeConceptMenuMobile();">
+            ${cleanTitle.slice(0, 22)}
+          </button>
+        `;
+      }).join('')}
+    `;
+    navBar.innerHTML = navHTML;
+    navBar.classList.add('conceptos-anim'); // Aplica la clase antes de renderizar
+    // Botón para volver al menú principal
+    const conceptosMenu = navBar.querySelector('.conceptos-toggle-btn');
+    if (conceptosMenu) {
+      conceptosMenu.addEventListener('click', () => {
+        showingConceptMenuOnly = false;
+        navBar.classList.remove('conceptos-anim');
+        // Agrega animación al volver al menú normal
+        navBar.classList.add('menu-normal-anim');
+        renderNavBar();
+        if (window.innerWidth <= 600) {
+          navBar.classList.add('open');
+        }
+        // Quita la clase de animación después de que termine
+        setTimeout(() => navBar.classList.remove('menu-normal-anim'), 400);
+      });
+    }
+    return;
+  } else {
+    navBar.classList.remove('conceptos-anim'); // <-- Quita la animación si no está en modo conceptos
+  }
+
+  // Menú normal
   let navHTML = slides.map((slide, idx) => {
     let btnText = /bienvenidos/i.test(slide.title)
       ? "Bienvenidos"
@@ -183,7 +220,7 @@ function renderNavBar() {
     `;
   }).join('');
 
-  // Botón conceptos y submenú
+  // Botón conceptos y submenú (solo visible en escritorio)
   navHTML += `
     <div class="conceptos-menu">
       <button class="nav-btn conceptos-toggle-btn">Conceptos ▼</button>
@@ -210,7 +247,9 @@ function renderNavBar() {
     conceptosMenu.addEventListener('click', (e) => {
       if (window.innerWidth <= 600) {
         e.preventDefault();
-        conceptosMenuDiv.classList.toggle('open');
+        // Alterna entre menú normal y menú de conceptos
+        showingConceptMenuOnly = !showingConceptMenuOnly;
+        renderNavBar();
       } else {
         showConceptSlides();
       }
@@ -232,10 +271,12 @@ function renderVerticalSlides() {
     let content = slide.content;
 const maxLength = 420; // Puedes ajustar el límite de caracteres
 
-if (isConcept) {
+if (isConcept || slide.title === "Valores Institucionales") {
+  // Solo mostrar "Mostrar más" en móviles
+  const isMobile = window.innerWidth <= 600;
   // Quita etiquetas HTML para contar solo texto
   const plainText = content.replace(/<[^>]+>/g, '');
-  if (plainText.length > maxLength) {
+  if (plainText.length > maxLength && isMobile) {
     // Solo muestra el botón si hay texto oculto
     let visibleText = plainText.slice(0, maxLength);
     let cutIdx = content.indexOf(visibleText) + visibleText.length;
@@ -258,7 +299,6 @@ if (isConcept) {
         </div>
       `;
     } else {
-      // Si no hay texto oculto, muestra todo sin botón
       content = `<div class="concept-bg-box"><div class="slide-content">${slide.content}</div></div>`;
     }
   } else {
@@ -266,6 +306,11 @@ if (isConcept) {
   }
 } else {
   content = `<div class="slide-content">${slide.content}</div>`;
+}
+
+    let imageHTML = '';
+if (slide.image) {
+  imageHTML = `<div class="slide-image-box"><img src="${slide.image}" class="slide-image"></div>`;
 }
 
     html += `
@@ -277,7 +322,7 @@ if (isConcept) {
           background-position: center;
           background-color: transparent;
         ` : 'background: transparent;'}">
-        <img src="${slide.image}" alt="">
+        ${imageHTML}
         <div class="slide-title">${slide.title}</div>
         ${content}
       </div>
@@ -441,7 +486,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // Si es botón principal del menú (pero NO el de conceptos en móvil), cierra el menú
       else if (
         e.target.classList.contains('nav-btn') &&
-        (!isMobile || e.target.textContent.trim() !== "Conceptos ▼")
+        (!isMobile || (
+          e.target.textContent.trim() !== "Conceptos ▼" &&
+          e.target.textContent.trim() !== "Conceptos ▲"
+        ))
       ) {
         navBar.classList.remove('open');
         document.querySelectorAll('.conceptos-menu.open').forEach(menu => {
@@ -478,3 +526,13 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', updateNavBarPosition);
   updateNavBarPosition();
 });
+
+function closeConceptMenuMobile() {
+  if (window.innerWidth <= 600) {
+    showingConceptMenuOnly = false;
+    renderNavBar();
+    // Asegura que el menú hamburguesa siga abierto
+    const navBar = document.getElementById('nav-bar');
+    if (navBar) navBar.classList.add('open');
+  }
+}

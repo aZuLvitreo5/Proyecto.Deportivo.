@@ -24,52 +24,84 @@
       color: #ed0101;
       letter-spacing: 0.01em;
     }
-    .header {
-      position: static; /* o puedes quitar la línea position: fixed */
-      top: auto;
-      left: auto;
-      width: 100vw;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      padding: 16px 32px;
-      background: #23272e;
-      color: #fff;
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-    }
-    .logo-container {
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff;
-      border-radius: 12px;
-      margin-right: 20px;
-      overflow: hidden;
-    }
-    .logo-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* Así la imagen llena el contenedor sin deformarse */
-      display: block;
-      border-radius: 0;  /* Igual que el contenedor */
-      background: transparent;
-    }
-    .header-text {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #ffffff;
-      letter-spacing: 1px;
-    }
+    /* Reestablece el header a diseño clásico: logo y texto alineados verticalmente */
+.header {
+  position: static;
+  width: 100%;
+  z-index: 2000;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px 16px;
+  background: #23272e;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  gap: 8px;
+}
+
+.logo-container {
+  background: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 36px;
+  max-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+  margin-left: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.logo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.header-text {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;      /* Permite saltos de línea */
+  overflow: hidden;         /* Oculta desbordes */
+  text-overflow: ellipsis;  /* Agrega puntos suspensivos si se desborda */
+  padding-right: 8px;
+}
+
+.header-text span {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: normal;
+  margin-top: 2px;
+}
+
     .nav-bar {
       position: fixed;
       top: 48px; /* Debe ser igual al height de .nav-hover-area */
       left: 0;
-      width: 100vw;
+      width: 100%; /* Cambiado a 100% */
       z-index: 1099;
       background: #23272eaa;
       box-shadow: 0 2px 8px rgba(0,0,0,0.10);
@@ -95,13 +127,14 @@
     .nav-bar::-webkit-scrollbar-track {
       background: #de0707;
     }
-    .nav-btn {
+    .nav-btn, .submenu-btn {
       font-family: 'Montserrat', Arial, sans-serif;
       font-size: 1.08rem;
       font-weight: 600;
       letter-spacing: 0.02em;
-      background: linear-gradient(90deg, #43e97b, #38f9d7);
+      background: #43e97b; /* Totalmente opaco */
       color: #23272e;
+      opacity: 1;
       border: none;
       border-radius: 0;
       padding: 18px 0;
@@ -125,72 +158,31 @@
       outline: none;
     }
     @media (max-width: 600px) {
-      .header {
-        font-size: 1.2rem;
-        padding: 10px 4px;
-      }
-      .logo-container {
-        margin-right: 0;
-        margin-bottom: 8px;
-      }
-      .header-text {
-        font-size: 1.1rem;
-      }
-      .nav-bar {
-        top: 80px;
-        grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-      }
-      .nav-btn {
-        font-size: 0.95rem;
-        padding: 12px 0;
-      }
-      .slide-title {
-        font-size: 1.2rem;
-        padding: 8px 10px;
-      }
-      .slide-content {
-        font-size: 1rem;
-        padding: 8px 10px;
-      }
-      .vertical-slide > img {
-        max-width: 90vw;
-        max-height: 24vh;
-      }
-      .menu-toggle {
-    display: flex;
-    position: fixed;
-    top: 18px;
-    right: 18px;
-    width: 54px;
-    height: 54px;
-    background: #23272e;
-    border: 2px solid #43e97b;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.18), 0 0 0 4px #fff8;
-    z-index: 3000;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    transition: background 0.2s, border 0.2s;
+      html {
+    font-size: 14px;
   }
-  .menu-toggle span {
-    width: 32px;
-    height: 5px;
-    background: #43e97b;
-    border-radius: 3px;
-    margin: 0 0 6px 0;
-    box-shadow: 0 1px 4px #0006;
-    transition: background 0.2s;
+  .vertical-slide {
+    padding: 10px 4vw;
   }
-  .menu-toggle span:last-child {
-    margin-bottom: 0;
+  .slide-title {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
   }
-  .menu-toggle:focus, .menu-toggle:hover {
-    background: #38f9d7;
-    border-color: #de0707;
+  .slide-content, .slide-content-short, .slide-content-full {
+    font-size: 0.97em;
+    line-height: 1.3;
   }
-  .menu-toggle:focus span, .menu-toggle:hover span {
-    background: #de0707;
+  .slide-image-box img,
+  .slide-image {
+    max-width: 90vw;
+    max-height: 120px;
+  }
+  .nav-btn, .submenu-btn, .conceptos-btn {
+    font-size: 0.95em;
+    padding: 0.5em 0.8em;
+  }
+  .concept-bg-box {
+    padding: 0.5em;
   }
     }
     .slide-container {
@@ -254,7 +246,12 @@
       background: transparent;
       box-shadow: none;
       scroll-snap-type: y mandatory;
-      margin-top: calc(80px + 56px); /* header + nav-bar, ajusta según tus alturas */
+      margin-top: 144px; /* header (80px) + nav-bar (64px) = 144px */
+    }
+    @media (max-width: 600px) {
+      .vertical-slider-container {
+        margin-top: 0 !important;
+      }
     }
 
     .vertical-slider {
@@ -423,38 +420,32 @@
   text-shadow: 0 2px 8px #fff8;
 }
     @media (max-width: 600px) {
-      .header {
-        font-size: 1.2rem;
-        padding: 10px 4px;
-      }
-      .logo-container {
-        margin-right: 0;
-        margin-bottom: 8px;
-      }
-      .header-text {
-        font-size: 1.1rem;
-      }
-      .nav-bar {
-        top: 80px;
-        grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-        background: #23272e !important; /* Sin transparencia */
-      }
-      .nav-btn, .submenu-btn {
-        background: #43e97b !important; /* Fondo sólido */
-        color: #23272e !important;
-        opacity: 1 !important;
-        box-shadow: 0 2px 8px rgba(67,233,123,0.12);
-      }
-      .nav-btn.active, .submenu-btn.active {
-        background: linear-gradient(90deg, #de0707, #ff9800) !important;
-        color: #fff !important;
-        opacity: 1 !important;
-      }
-      .conceptos-menu,
-      .conceptos-submenu {
-        background: #23272e !important;
-        opacity: 1 !important;
-      }
+      html {
+    font-size: 14px;
+  }
+  .vertical-slide {
+    padding: 10px 4vw;
+  }
+  .slide-title {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
+  }
+  .slide-content, .slide-content-short, .slide-content-full {
+    font-size: 0.97em;
+    line-height: 1.3;
+  }
+  .slide-image-box img,
+  .slide-image {
+    max-width: 90vw;
+    max-height: 120px;
+  }
+  .nav-btn, .submenu-btn, .conceptos-btn {
+    font-size: 0.95em;
+    padding: 0.5em 0.8em;
+  }
+  .concept-bg-box {
+    padding: 0.5em;
+  }
     }
     .slide-container {
       background: #333;
@@ -517,7 +508,12 @@
       background: transparent;
       box-shadow: none;
       scroll-snap-type: y mandatory;
-      margin-top: calc(80px + 56px); /* header + nav-bar, ajusta según tus alturas */
+      margin-top: 144px; /* header (80px) + nav-bar (64px) = 144px */
+    }
+    @media (max-width: 600px) {
+      .vertical-slider-container {
+        margin-top: 0 !important;
+      }
     }
 
     .vertical-slider {
@@ -634,81 +630,57 @@
       100% { transform: scale(1); }
     }
     .menu-toggle {
-      display: none;
-      position: fixed;
-      top: 80px;
-      right: 24px;
-      z-index: 2001;
-      width: 44px;
-      height: 44px;
-      background: #23272e;
-      border: none;
-      border-radius: 8px;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
+  display: none;
+  position: fixed;
+  top: 14px;         /* Más arriba */
+  right: 14px;       /* Más pegado al borde */
+  z-index: 2001;
+  width: 36px;       /* Más pequeño */
+  height: 36px;      /* Más pequeño */
+  background: #23272ed0; /* Más transparente */
+  border: 2px solid #43e97b;
+  border-radius: 8px; /* Más pequeño */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;          /* Menor separación */
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  padding: 0;
+  opacity: 0.75;     /* Más transparente */
+  transition: opacity 0.2s, background 0.2s;
+}
 
-    .menu-toggle span {
-      display: block;
-      width: 26px;
-      height: 4px;
-      background: #fff;
-      border-radius: 2px;
-      transition: 0.3s;
-    }
+.menu-toggle:hover {
+  opacity: 1;
+  background: #23272ee0;
+}
 
-    .menu-toggle:hover span {
-      background: #38f9d7;
-    }
+.menu-toggle span {
+  display: block;
+  width: 22px;       /* Más corto */
+  height: 4px;       /* Más delgado */
+  background: #43e97b;
+  border-radius: 2px;
+  margin: 0;
+  transition: background 0.2s;
+}
 
-    .menu-toggle:focus {
-      outline: none;
-    }
+.menu-toggle:hover span {
+  background: #38f9d7;
+}
 
-    @media (max-width: 600px) {
-      .menu-toggle {
+.menu-toggle:focus {
+  outline: none;
+}
+
+@media (max-width: 600px) {
+  .menu-toggle {
     display: flex;
-    position: fixed;
-    top: 18px;
-    right: 18px;
-    width: 54px;
-    height: 54px;
-    background: #23272e;
-    border: 2px solid #43e97b;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.18), 0 0 0 4px #fff8;
-    z-index: 3000;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    transition: background 0.2s, border 0.2s;
   }
-  .menu-toggle span {
-    width: 32px;
-    height: 5px;
-    background: #43e97b;
-    border-radius: 3px;
-    margin: 0 0 6px 0;
-    box-shadow: 0 1px 4px #0006;
-    transition: background 0.2s;
-  }
-  .menu-toggle span:last-child {
-    margin-bottom: 0;
-  }
-  .menu-toggle:focus, .menu-toggle:hover {
-    background: #38f9d7;
-    border-color: #de0707;
-  }
-  .menu-toggle:focus span, .menu-toggle:hover span {
-    background: #de0707;
-  }
-    }
+}
     .nav-bar {
-  width: 100vw;
+  width: 100%;
   z-index: 999;
   background: #23272eaa;
   box-shadow: 0 2px 8px rgba(0,0,0,0.10);
@@ -774,7 +746,7 @@
 
 /* Botones transparentes y efecto hover */
 .nav-btn, .submenu-btn {
-  background: rgba(67,233,123,0.18);
+  background: rgba(67,233,123,0.38); /* Más opaco */
   color: #fff;
   border: none;
   border-radius: 0;
@@ -791,7 +763,7 @@
   border-bottom: 1px solid #333;
   height: 100%;
   box-sizing: border-box;
-  opacity: 0.7;
+  opacity: 0.95; /* Más opaco */
 }
 
 .nav-btn:hover, .submenu-btn:hover, .nav-btn:focus, .submenu-btn:focus {
@@ -818,7 +790,6 @@
   left: 0;
   top: 100%;
   min-width: 180px;
-  background: #23272ecc;
   box-shadow: 0 4px 16px rgba(0,0,0,0.18);
   border-radius: 0 0 12px 12px;
   z-index: 1001;
@@ -837,11 +808,8 @@
   padding: 14px 18px;
   border-bottom: 1px solid #333;
   border-radius: 0;
-  background: rgba(67,233,123,0.12);
-  color: #fff;
   text-align: left;
   font-size: 1rem;
-  opacity: 0.8;
 }
 
 .conceptos-submenu .submenu-btn:last-child {
@@ -853,10 +821,26 @@
   color: #23272e;
   opacity: 1;
 }
+
+/* Solo el submenú del menú hamburguesa totalmente opaco */
+.conceptos-menu.open .conceptos-submenu,
+.conceptos-submenu {
+  background: #23272e !important; /* Fondo sólido, sin transparencia */
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+/* Opcional: elimina la transparencia en el menú hamburguesa en móvil */
+@media (max-width: 600px) {
+  .nav-bar.open {
+    background: #23272e !important;
+  }
+}
 @media (max-width: 600px) {
   .nav-bar,
-  .nav-hover-area {
+  .nav-hover-area,
+  .menu-label {
     display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 }
 @keyframes menuHint {
@@ -882,6 +866,16 @@
 .nav-bar:focus-within {
   opacity: 1 !important;
   pointer-events: auto !important;
+}
+
+@media (max-width: 1024px) {
+  .nav-bar.open .nav-btn,
+  .nav-bar.open .submenu-btn {
+    background: #43e97b !important; /* Verde totalmente opaco */
+    color: #23272e !important;
+    opacity: 1 !important;
+    box-shadow: none !important;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -1021,13 +1015,85 @@
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
+@media (max-width: 600px) {
+  .vertical-slide {
+    min-height: 90vh;
+    height: auto;
+    margin-bottom: 32px; /* Espacio entre slides */
+    padding-bottom: 24px;
+    z-index: 1 !important;
+  }
+  .vertical-slide[data-concept="true"] {
+    padding-top: 32px !important; /* Menos espacio arriba */
+    margin-bottom: 32px !important;
+  }
+}
+/* Animación para el menú de conceptos móvil */
+@keyframes fadeSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.nav-bar.conceptos-anim {
+  animation: fadeSlideDown 0.35s cubic-bezier(.5,1.7,.5,1);
+}
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.nav-bar.menu-normal-anim {
+  animation: fadeSlideUp 0.35s cubic-bezier(.5,1.7,.5,1);
+}
+/* Animación de entrada: el botón de conceptos sube lentamente */
+@keyframes conceptoSube {
+  0% {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación de salida: el botón de conceptos baja suavemente */
+@keyframes conceptoBaja {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(3px); /* Antes era 80px */
+  }
+}
+
+/* Aplica la animación al botón de conceptos en móvil */
+.conceptos-anim .conceptos-toggle-btn {
+  animation: conceptoSube 0.7s cubic-bezier(.5,1.7,.5,1) both;
+}
+
+.menu-normal-anim .conceptos-toggle-btn {
+  animation: conceptoBaja 0.7s cubic-bezier(.5,1.7,.5,1) both;
+}
   </style>
 </head>
 <body>
-  <div id="splash-logo" class="splash-screen">
+  <div id="splash-logo" class="splash-screen" style="display:none;">
     <img src="images/logo.jpg" alt="Logo" class="splash-logo">
   </div>
-  <div id="splash-balon" class="splash-screen" style="display:none;">
+  <div id="splash-balon" class="splash-screen" style="display:flex;">
     <div class="splash-basketball">
       <div class="ball">
         <div class="stroke pos1"></div>
