@@ -174,6 +174,7 @@ function renderNavBar() {
 
   // Si estamos mostrando solo el menú de conceptos en móvil
   if (showingConceptMenuOnly && window.innerWidth <= 600) {
+    // SOLO muestra el menú de conceptos y sus botones
     let navHTML = `
       <button class="nav-btn conceptos-toggle-btn" style="font-weight:bold;">Conceptos ▲</button>
       ${conceptSlides.map((slide, i) => {
@@ -187,12 +188,16 @@ function renderNavBar() {
     `;
     navBar.innerHTML = navHTML;
     navBar.classList.add('conceptos-anim'); // Aplica la clase antes de renderizar
+    setTimeout(() => {
+      navBar.classList.add('anim-end');
+    }, 700); // Duración de la animación conceptoSube
     // Botón para volver al menú principal
     const conceptosMenu = navBar.querySelector('.conceptos-toggle-btn');
     if (conceptosMenu) {
       conceptosMenu.addEventListener('click', () => {
         showingConceptMenuOnly = false;
         navBar.classList.remove('conceptos-anim');
+        navBar.classList.remove('anim-end');
         // Agrega animación al volver al menú normal
         navBar.classList.add('menu-normal-anim');
         renderNavBar();
@@ -205,10 +210,10 @@ function renderNavBar() {
     }
     return;
   } else {
-    navBar.classList.remove('conceptos-anim'); // <-- Quita la animación si no está en modo conceptos
+    navBar.classList.remove('conceptos-anim');
   }
 
-  // Menú normal
+  // Menú normal (NO incluyas el submenú si es móvil y está mostrando solo conceptos)
   let navHTML = slides.map((slide, idx) => {
     let btnText = /bienvenidos/i.test(slide.title)
       ? "Bienvenidos"
@@ -220,22 +225,24 @@ function renderNavBar() {
     `;
   }).join('');
 
-  // Botón conceptos y submenú (solo visible en escritorio)
-  navHTML += `
-    <div class="conceptos-menu">
-      <button class="nav-btn conceptos-toggle-btn">Conceptos ▼</button>
-      <div class="conceptos-submenu">
-        ${conceptSlides.map((slide, i) => {
-          let cleanTitle = slide.title.replace(/<[^>]*>?/gm, '').trim();
-          return `
-            <button class="submenu-btn" onclick="showConceptSlides(${i})">
-              ${cleanTitle.slice(0, 22)}
-            </button>
-          `;
-        }).join('')}
+  // Solo incluye el submenú en escritorio o si NO está mostrando solo conceptos en móvil
+  if (!(window.innerWidth <= 600 && showingConceptMenuOnly)) {
+    navHTML += `
+      <div class="conceptos-menu">
+        <button class="nav-btn conceptos-toggle-btn">Conceptos ▼</button>
+        <div class="conceptos-submenu">
+          ${conceptSlides.map((slide, i) => {
+            let cleanTitle = slide.title.replace(/<[^>]*>?/gm, '').trim();
+            return `
+              <button class="submenu-btn" onclick="showConceptSlides(${i})">
+                ${cleanTitle.slice(0, 22)}
+              </button>
+            `;
+          }).join('')}
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  }
 
   navBar.innerHTML = navHTML;
 
@@ -452,10 +459,29 @@ document.addEventListener('DOMContentLoaded', () => {
             splashLogo.style.display = 'none';
             // Ahora sí, muestra la app
             appElements.forEach(el => { if (el) el.style.visibility = 'visible'; });
+            // Muestra el modal SOLO después del splash y carga
+            showMobileModal();
           }, 800);
         }, 1800); // Duración del splash del logo
       }, 800);
     }, wait); // Espera lo necesario para completar 3 segundos
+  }
+
+  // Mobile experience warning
+  function showMobileWarning() {
+    const warning = document.getElementById('mobile-experience-warning');
+    // El modal de abajo nunca se muestra
+    if (warning) warning.style.display = 'none';
+  }
+  showMobileWarning();
+  window.addEventListener('resize', showMobileWarning);
+
+  const hideBtn = document.getElementById('hide-mobile-warning');
+  if (hideBtn) {
+    hideBtn.addEventListener('click', () => {
+      localStorage.setItem('hideMobileWarning', '1');
+      document.getElementById('mobile-experience-warning').style.display = 'none';
+    });
   }
 
   // Menu toggle for mobile
@@ -525,6 +551,39 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', updateNavBarPosition);
   window.addEventListener('resize', updateNavBarPosition);
   updateNavBarPosition();
+
+  // Mobile experience modal (bloquea navegación)
+  function showMobileModal() {
+    const modal = document.getElementById('mobile-experience-modal');
+    if (
+      window.innerWidth <= 600 &&
+      modal &&
+      !localStorage.getItem('hideMobileModal')
+    ) {
+      modal.style.display = 'block';
+      // Bloquea scroll y navegación
+      document.body.style.overflow = 'hidden';
+      document.body.style.pointerEvents = 'none';
+      modal.style.pointerEvents = 'auto';
+    }
+  }
+
+  function hideMobileModal() {
+    const modal = document.getElementById('mobile-experience-modal');
+    if (modal) modal.style.display = 'none';
+    localStorage.setItem('hideMobileModal', '1');
+    document.body.style.overflow = '';
+    document.body.style.pointerEvents = '';
+  }
+
+  document.getElementById('hide-mobile-modal')?.addEventListener('click', hideMobileModal);
+  document.getElementById('close-mobile-modal')?.addEventListener('click', () => {
+    const modal = document.getElementById('mobile-experience-modal');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = '';
+    document.body.style.pointerEvents = '';
+    // No guardar nada en localStorage
+  });
 });
 
 function closeConceptMenuMobile() {

@@ -1087,6 +1087,17 @@
 .menu-normal-anim .conceptos-toggle-btn {
   animation: conceptoBaja 0.7s cubic-bezier(.5,1.7,.5,1) both;
 }
+@media (max-width: 600px) {
+  .conceptos-anim .submenu-btn {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .conceptos-anim.anim-end .submenu-btn {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.2s;
+  }
+}
   </style>
 </head>
 <body>
@@ -1123,6 +1134,82 @@
   </div>
   <nav class="nav-bar" id="nav-bar"></nav>
   <div class="vertical-slider-container" id="vertical-slider-container"></div>
+  <div id="mobile-experience-warning" style="
+  display:none;
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3000;
+  background: #23272e;
+  color: #fff;
+  padding: 18px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  font-size: 1.08rem;
+  font-family: 'Montserrat', Arial, sans-serif;
+  text-align: center;
+  max-width: 90vw;
+">
+  Visita la página en PC Para una mejor experiencia.<br>
+  <button id="hide-mobile-warning" style="
+    margin-top: 12px;
+    background: #43e97b;
+    color: #23272e;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  ">No volver a mostrar</button>
+</div>
+<div id="mobile-experience-modal" style="
+  display:none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4000;
+  background: #23272e;
+  color: #fff;
+  padding: 28px 32px 24px 32px;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  font-size: 1.15rem;
+  font-family: 'Montserrat', Arial, sans-serif;
+  text-align: center;
+  max-width: 92vw;
+  min-width: 220px;
+">
+  <button id="close-mobile-modal" style="
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  " aria-label="Cerrar">×</button>
+  <div style="margin-bottom: 18px;">
+    Para una mejor experiencia visita la página en PC.
+  </div>
+  <button id="hide-mobile-modal" style="
+    margin-top: 8px;
+    background: #43e97b;
+    color: #23272e;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    cursor: pointer;
+  ">No volver a mostrar</button>
+</div>
   <script src="app.js"></script>
 </body>
 </html>
