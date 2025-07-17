@@ -110,8 +110,9 @@ const conceptSlides = [
     isConcept: true,
     content: `
       <p>"Mexicas Basket" es una propuesta de nombre para una academia de básquetbol que combina un término indígena mexicano con un concepto moderno y deportivo.</p>
-      <p>Mexicas es el Nombre  Náhuatl del pueblo Azteca y hace referencia a una sociedad organizada, guerrera y ancestral. Este titulo de las cultura Mexica/Azteca, deja ver  autoridad política, militar y espiritual. </p>
-      <p>¿Qué transmite “Mexicas Basket”?Liderazgo, grandeza, poder ancestral. Ideal para una academia que forma no solo jugadores, sino líderes dentro y fuera de la cancha. Mezcla raíces culturales con identidad deportiva contemporánea.</p>
+      <p>Mexicas es el Nombre  Náhuatl del pueblo Azteca y hace referencia a una sociedad organizada, guerrera y ancestral. Este titulo de las cultura Mexica/Azteca deja ver  autoridad política, militar y espiritual. </p>
+      <p>Dentro de Mexicas se engloban los guerreros Águila y Jaguar y se encuentran combinados en el logo del águila con manchas de jaguar. <p>
+      <p>¿Qué transmite “Mexicas Basket”? Liderazgo, grandeza, poder ancestral ideal para una academia que forma no solo jugadores, sino líderes dentro y fuera de la cancha. Mezcla raíces culturales con identidad deportiva contemporánea.</p>
       <p><em>¿Tienes una propuesta de logo? ¡Compártela con nosotros!</em></p>
     `,
     image: "images/logo002.png",
@@ -122,9 +123,9 @@ const conceptSlides = [
     isConcept: true,
     content: `
       <p>Sky Hoops significa “Aros en el Cielo”</p>
-      <p>Este nombre e identidad buscan un enfoque en el sentido de soñar con volar y alcanzar los aros. Refleja unas alas, que te permiten lograr los objetivos con la fuerza de un corcel.</p>
-      <p>Busca ser llamativo para los niños y puedan buscar su identidad propia</p>
-      <p>¿Qué transmite?  sueños, volar, fiereza, liderazgo, trabajo y esfuerzo, el camino hacía el cielo, enfocado en alcanzar objetivos a corto, mediano y largo plazo. </p>
+      <p>Este nombre e identidad buscan un enfoque en el sentido de soñar con volar y alcanzar los aros. Refleja unas alas, estas alas te permiten lograr los objetivos con la fuerza de un corcel.</p>
+      <p>Busca ser llamativo para los niños y niñas, para que puedan buscar su identidad propia</p>
+      <p>¿Qué transmite?  Sueños, volar, fiereza, liderazgo, trabajo y esfuerzo, el camino hacía el cielo, enfocado en alcanzar objetivos a corto, mediano y largo plazo. </p>
     `,
     image: "images/sky-hoops.png",
     image2: "images/sky-hoops-alt.png", // Nueva imagen opcional
@@ -134,9 +135,9 @@ const conceptSlides = [
     title: "HillWalkers",
     isConcept: true,
     content: `
-      <p>Este Nombre e identidad busca un enfoque en la colina de las Alamedas, donde para llegar a la cancha, se tiene que caminar. </p>
-      <p>Busca ser llamativo para los niños y puedan buscar su identidad propia,  HillWalkers significa “Los que caminan colinas” </p>
-      <p>Que Transmite?  Fiereza, Liderazgo, Trabajo y esfuerzo, el camino hacía la cima, enfocado en mejora continúa. </p>
+      <p>Este nombre e identidad buscan un enfoque en la colina de las Alamedas, donde para llegar a la cancha, se tiene que caminar. </p>
+      <p>Busca ser llamativo para los niños y niñas, para que puedan buscar su identidad propia,  HillWalkers significa “Los que caminan colinas”. </p>
+      <p>Que transmite?  Fiereza, liderazgo, trabajo y esfuerzo, el camino hacía la cima, enfocado en mejora continúa. </p>
       <p><em>¿Te identificas con este concepto? ¡Cuéntanos tu opinión!</em></p>
     `,
     image: "images/hill-walkers.png",
@@ -148,7 +149,8 @@ const conceptSlides = [
   isConcept: true,
   content: `
     <p>Jaguares Basket" es una propuesta de nombre para una academia de básquetbol que combina un término indígena de un guerrero mexica con un concepto moderno y deportivo y el alma de un felino.</p>
-    <p>Jaguares es el Nombre de un felino y se conjuga con la fiereza de de un guerrero azteca/Mexica de gran nobleza militar. hace referencia a una sociedad militar organizada, guerrera y ancestral. Deja ver  autoridad política, militar y espiritual. </p>
+    <p>Jaguares es el Nombre de un felino y se conjuga con la fiereza de un guerrero azteca/Mexica de gran nobleza militar, hace referencia a una sociedad militar organizada, guerrera y ancestral, deja ver  autoridad política, militar y espiritual. </p>
+    <p>Dentro de Mexicas se engloban los guerreros Jaguar y se encuentran combinados en el logo con manchas de jaguar. 
     <p>¿Qué transmite “Jaguares Basket”? Liderazgo, grandeza, poder ancestral. Ideal para una academia que forma no solo jugadores, sino líderes dentro y fuera de la cancha. Mezcla raíces culturales con identidad deportiva contemporánea.</p>
     <p><em>¿Qué te inspira este concepto? ¡Compártelo con nosotros!</em></p>
   `,
