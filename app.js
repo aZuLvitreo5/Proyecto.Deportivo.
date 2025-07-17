@@ -127,6 +127,7 @@ const conceptSlides = [
       <p>¿Qué transmite?  sueños, volar, fiereza, liderazgo, trabajo y esfuerzo, el camino hacía el cielo, enfocado en alcanzar objetivos a corto, mediano y largo plazo. </p>
     `,
     image: "images/sky-hoops.png",
+    image2: "images/sky-hoops-alt.png", // Nueva imagen opcional
     background: "images/fondo_logo.jpg"
   },
   {
@@ -138,7 +139,8 @@ const conceptSlides = [
       <p>Que Transmite?  Fiereza, Liderazgo, Trabajo y esfuerzo, el camino hacía la cima, enfocado en mejora continúa. </p>
       <p><em>¿Te identificas con este concepto? ¡Cuéntanos tu opinión!</em></p>
     `,
-    image: "images/hill-walkers.png", 
+    image: "images/hill-walkers.png",
+    image2: "images/hill-walkers-alt.png", // Nueva imagen opcional
     background: "images/fondo_logo.jpg"
   },
   {
@@ -150,7 +152,8 @@ const conceptSlides = [
     <p>¿Qué transmite “Jaguares Basket”? Liderazgo, grandeza, poder ancestral. Ideal para una academia que forma no solo jugadores, sino líderes dentro y fuera de la cancha. Mezcla raíces culturales con identidad deportiva contemporánea.</p>
     <p><em>¿Qué te inspira este concepto? ¡Compártelo con nosotros!</em></p>
   `,
-  image: "images/jaguares.png", // Cambia la ruta si tienes una imagen específica
+  image: "images/jaguares.png",
+  image2: "images/jaguares-alt.png", // Nueva imagen opcional
   background: "images/fondo_logo.jpg"
 },
   {
@@ -163,6 +166,18 @@ const conceptSlides = [
     `,
     image: "images/ideas-concepto.png",
     background: "images/fondo_logo.jpg"
+  },
+  {
+    title: "Vota por el mejor concepto",
+    isConcept: true,
+    content: `
+      <div style="text-align:center;">
+        <p>¡Participa votando por tu concepto de logo favorito!</p>
+        <a href="votacion.html" target="_blank" class="conceptos-btn" style="margin-top:24px;display:inline-block;">Ir a votación</a>
+      </div>
+    `,
+    image: "images/votacion.png",
+    background: "images/fondo_logo.jpg"
   }
 ];
 
@@ -174,17 +189,17 @@ function renderNavBar() {
 
   // Si estamos mostrando solo el menú de conceptos en móvil
   if (showingConceptMenuOnly && window.innerWidth <= 600) {
-    // SOLO muestra el menú de conceptos y sus botones
+    // Muestra todos los conceptos y el botón de votación
     let navHTML = `
       <button class="nav-btn conceptos-toggle-btn" style="font-weight:bold;">Conceptos ▲</button>
-      ${conceptSlides.map((slide, i) => {
-        let cleanTitle = slide.title.replace(/<[^>]*>?/gm, '').trim();
-        return `
-          <button class="submenu-btn" onclick="showConceptSlides(${i}); closeConceptMenuMobile();">
-            ${cleanTitle.slice(0, 22)}
-          </button>
-        `;
-      }).join('')}
+      ${conceptSlides.slice(0, -1).map((slide, i) => `
+        <button class="submenu-btn" onclick="showConceptSlides(${i}); closeConceptMenuMobile();">
+          ${slide.title.replace(/<[^>]*>?/gm, '').trim().slice(0, 22)}
+        </button>
+      `).join('')}
+      <button class="submenu-btn" onclick="showConceptSlides(${conceptSlides.length - 1}); closeConceptMenuMobile();">
+        Votación
+      </button>
     `;
     navBar.innerHTML = navHTML;
     navBar.classList.add('conceptos-anim'); // Aplica la clase antes de renderizar
@@ -231,7 +246,7 @@ function renderNavBar() {
       <div class="conceptos-menu">
         <button class="nav-btn conceptos-toggle-btn">Conceptos ▼</button>
         <div class="conceptos-submenu">
-          ${conceptSlides.map((slide, i) => {
+          ${conceptSlides.slice(0, -1).map((slide, i) => {
             let cleanTitle = slide.title.replace(/<[^>]*>?/gm, '').trim();
             return `
               <button class="submenu-btn" onclick="showConceptSlides(${i})">
@@ -239,6 +254,9 @@ function renderNavBar() {
               </button>
             `;
           }).join('')}
+          <button class="submenu-btn" onclick="showConceptSlides(${conceptSlides.length - 1})">
+            Votación
+          </button>
         </div>
       </div>
     `;
@@ -317,7 +335,10 @@ if (isConcept || slide.title === "Valores Institucionales") {
 
     let imageHTML = '';
 if (slide.image) {
-  imageHTML = `<div class="slide-image-box"><img src="${slide.image}" class="slide-image"></div>`;
+  imageHTML += `<div class="slide-image-box"><img src="${slide.image}" class="slide-image"></div>`;
+}
+if (slide.image2) {
+  imageHTML += `<div class="slide-image-box"><img src="${slide.image2}" class="slide-image"></div>`;
 }
 
     html += `
@@ -595,3 +616,104 @@ function closeConceptMenuMobile() {
     if (navBar) navBar.classList.add('open');
   }
 }
+
+// --- Votación de conceptos ---
+function renderVotacionConceptos() {
+  const cont = document.getElementById('votacion-conceptos');
+  if (!cont) return;
+
+  // Solo conceptos con logo
+  const conceptos = conceptSlides.slice(0, -2); // Excluye "¡Envía tu concepto!" y "Vota por el mejor concepto"
+  cont.innerHTML = `
+    <div style="margin-bottom:22px;color:#de0707;font-weight:bold;">
+      Los resultados se revelarán al final de la votación
+    </div>
+    ${conceptos.map((slide, idx) => `
+      <div style="margin-bottom:22px;display:flex;align-items:center;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <img src="${slide.image}" alt="Logo ${slide.title}" style="width:64px;height:64px;object-fit:contain;background:#fff;border-radius:10px;box-shadow:0 2px 8px #0001;">
+        <div style="min-width:120px;">
+          <div style="font-weight:bold;font-size:1.08em;margin-bottom:6px;">${slide.title}</div>
+          <button class="btn-votar-concepto" data-concepto="${slide.title}" style="
+            background:linear-gradient(90deg,#43e97b 0%,#38f9d7 100%);
+            color:#23272e;border:none;border-radius:8px;padding:8px 18px;
+            font-size:1em;font-weight:600;cursor:pointer;box-shadow:0 2px 8px #43e97b22;
+          ">Votar</button>
+        </div>
+      </div>
+    `).join('')}
+  `;
+  agregarEventosVotacion();
+}
+
+// Firebase config (usa el mismo que en tu votacion.html)
+const firebaseConfigVotacion = {
+  apiKey: "AIzaSyDBwrRgJve6tN7ivUgzQx9Bu2n2_R48szk",
+  authDomain: "proyecto-deportivo-x.firebaseapp.com",
+  databaseURL: "https://proyecto-deportivo-x-default-rtdb.firebaseio.com",
+  projectId: "proyecto-deportivo-x",
+  storageBucket: "proyecto-deportivo-x.appspot.com",
+  messagingSenderId: "698413793325",
+  appId: "1:698413793325:web:cb96dcd3b9f7ca4cbcf8a4"
+};
+
+let firebaseAppVotacion, dbVotacion;
+function initFirebaseVotacion() {
+  if (!window.firebase) {
+    const script = document.createElement('script');
+    script.src = "https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js";
+    script.onload = () => {
+      const script2 = document.createElement('script');
+      script2.src = "https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js";
+      script2.onload = () => {
+        firebaseAppVotacion = firebase.initializeApp(firebaseConfigVotacion, "votacionApp");
+        dbVotacion = firebaseAppVotacion.database();
+        cargarVotosConceptos();
+      };
+      document.body.appendChild(script2);
+    };
+    document.body.appendChild(script);
+  } else {
+    if (!firebase.apps.length) {
+      firebaseAppVotacion = firebase.initializeApp(firebaseConfigVotacion, "votacionApp");
+    } else {
+      firebaseAppVotacion = firebase.app("votacionApp");
+    }
+    dbVotacion = firebaseAppVotacion.database();
+    cargarVotosConceptos();
+  }
+}
+
+function cargarVotosConceptos() {
+  // Vacío: ya no se muestran votos
+}
+
+function agregarEventosVotacion() {
+  document.querySelectorAll('.btn-votar-concepto').forEach(btn => {
+    btn.onclick = function() {
+      const concepto = this.getAttribute('data-concepto');
+      if (localStorage.getItem('votoConcepto')) {
+        document.getElementById('votacion-status').textContent = "¡Ya has votado!";
+        return;
+      }
+      if (!window.firebase || !dbVotacion) {
+        document.getElementById('votacion-status').textContent = "Cargando sistema de votos...";
+        return;
+      }
+      const votoRef = dbVotacion.ref('votos/' + concepto);
+      votoRef.transaction(current => (current || 0) + 1);
+      localStorage.setItem('votoConcepto', concepto);
+      document.getElementById('votacion-status').textContent = "¡Gracias por tu voto!";
+    };
+  });
+}
+
+// Llama a renderVotacionConceptos cuando se muestre la slide de votación
+const observerVotacion = new MutationObserver(() => {
+  const votacionDiv = document.getElementById('votacion-conceptos');
+  if (votacionDiv && votacionDiv.childElementCount === 0) {
+    renderVotacionConceptos();
+  }
+});
+document.addEventListener('DOMContentLoaded', () => {
+  observerVotacion.observe(document.body, { childList: true, subtree: true });
+});

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Votación de Conceptos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: #91bed0;
+      margin: 0;
+      padding: 0;
+      color: #23272e;
+    }
+    .container {
+      max-width: 480px;
+      margin: 32px auto;
+      background: linear-gradient(135deg, #023953, #024c69, #026f9d, #0386c2, #03c8ff);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    h1 {
+      color: #43e97b;
+      margin-bottom: 24px;
+    }
+    .concept-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px 0;
+    }
+    .concept-list li {
+      margin-bottom: 18px;
+      padding: 16px 10px;
+      border-radius: 10px;
+      background: #f0f8f5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      border: 1px solid #43e97b33;
+    }
+    .concept-list button {
+      background: #43e97b;
+      color: #2ba4dc;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .concept-list button:hover {
+      background: #38f9d7;
+      color: #23272e;
+    }
+    .thanks {
+      color: #de0707;
+      font-weight: bold;
+      margin-top: 24px;
+      font-size: 1.2em;
+    }
+    .alert {
+      margin-bottom: 22px;
+      color: #de0707;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Vota por tu concepto favorito</h1>
+    <div class="alert">
+      Los resultados se revelarán al final de la votación
+    </div>
+    <ul class="concept-list" id="concept-list"></ul>
+    <div class="thanks" id="thanks" style="display:none;">
+      ¡Gracias por tu voto!
+    </div>
+  </div>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1. Configura tu proyecto de Firebase aquí:
+      const firebaseConfig = {
+        apiKey: "AIzaSyDBwrRgJve6tN7ivUgzQx9Bu2n2_R48szk",
+        authDomain: "proyecto-deportivo-x.firebaseapp.com",
+        projectId: "proyecto-deportivo-x",
+        storageBucket: "proyecto-deportivo-x.firebasestorage.app",
+        messagingSenderId: "698413793325",
+        appId: "1:698413793325:web:cb96dcd3b9f7ca4cbcf8a4",
+        measurementId: "G-6LPWPZQEWS"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.database();
+
+      // 2. Lista de conceptos con logo
+      const conceptos = [
+        {
+          nombre: "Tlatoani Hoops",
+          img: "images/logo001.png"
+        },
+        {
+          nombre: "Mexicas Basket",
+          img: "images/logo002.png"
+        },
+        {
+          nombre: "Sky Hoops",
+          img: "images/sky-hoops.png"
+        },
+        {
+          nombre: "HillWalkers",
+          img: "images/hill-walkers.png"
+        },
+        {
+          nombre: "Jaguares Basket",
+          img: "images/jaguares.png"
+        }
+      ];
+
+      // 3. Renderiza la lista SIN mostrar votos
+      const list = document.getElementById('concept-list');
+      function renderConcepts() {
+        list.innerHTML = '';
+        conceptos.forEach(concepto => {
+          const li = document.createElement('li');
+          li.style.alignItems = "center";
+          li.innerHTML = `
+            <span style="display:flex;align-items:center;gap:12px;">
+              <img src="${concepto.img}" alt="Logo ${concepto.nombre}" style="width:48px;height:48px;object-fit:contain;background:#fff;border-radius:10px;box-shadow:0 2px 8px #0001;">
+              <span>${concepto.nombre}</span>
+            </span>
+            <span>
+              <button data-concepto="${concepto.nombre}">Votar</button>
+            </span>
+          `;
+          list.appendChild(li);
+        });
+      }
+
+      renderConcepts();
+
+      // 4. Maneja el voto
+      list.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON') {
+          const concepto = e.target.getAttribute('data-concepto');
+          // Evita votos múltiples por usuario (simple: localStorage)
+          if (localStorage.getItem('votoConcepto')) {
+            document.getElementById('thanks').textContent = "¡Ya has votado!";
+            document.getElementById('thanks').style.display = "block";
+            return;
+          }
+          // Suma el voto en Firebase
+          const votoRef = db.ref('votos/' + concepto);
+          votoRef.transaction(current => (current || 0) + 1);
+          localStorage.setItem('votoConcepto', concepto);
+          document.getElementById('thanks').textContent = "¡Gracias por tu voto!";
+          document.getElementById('thanks').style.display = "block";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
